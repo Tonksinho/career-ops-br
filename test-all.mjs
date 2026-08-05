@@ -248,6 +248,7 @@ const scripts = [
   { name: 'reconcile-pipeline.mjs --dry-run', expectExit: 0 },
   { name: 'analyze-patterns.mjs --self-test', expectExit: 0 },
   { name: 'check-table-freshness.mjs --self-test', expectExit: 0 },
+  { name: 'br-compensation.mjs --self-test', expectExit: 0 },
   { name: 'upskill.mjs --self-test', expectExit: 0 },
   { name: 'detect-reposts.mjs --self-test', expectExit: 0 },
   { name: 'discover-ats.mjs --self-test', expectExit: 0 },
@@ -283,6 +284,7 @@ const scripts = [
   { name: 'contacts.test.mjs', expectExit: 0 },
   { name: 'reply-matcher.test.mjs', expectExit: 0 },
   { name: 'validate-portals.mjs --file templates/portals.example.yml', expectExit: 0 },
+  { name: 'validate-portals.mjs --file templates/portals.brazil.example.yml', expectExit: 0 },
   { name: 'validate-system-paths-coverage.mjs --self-test', expectExit: 0 },
   // The bare coverage run is NOT here on purpose: this section executes each
   // script from a throwaway copy of the repo, and the coverage check needs
@@ -1648,7 +1650,7 @@ const outputLanguageClaudeDoc = readTextLF('CLAUDE.md');
 const careerOpsSkill = readTextLF('.agents/skills/career-ops/SKILL.md');
 const batchPrompt = readTextLF('batch/batch-prompt.md');
 
-if (/language:\s*\n(?:\s*#.*\n)*\s*output:\s*["']?en["']?/.test(profileExample)) {
+if (/language:\s*\n(?:\s*#.*\n)*\s*output:\s*["']?pt-BR["']?/.test(profileExample)) {
   pass('profile.example.yml documents language.output default');
 } else {
   fail('profile.example.yml is missing language.output default');
@@ -2601,13 +2603,12 @@ if (
 
 const routerSkill = readFile('.agents/skills/career-ops/SKILL.md');
 if (
-  /argument-hint:.*offer-prep/.test(routerSkill) &&
   routerSkill.includes('| `offer-prep` | `offer-prep` |') &&
   routerSkill.includes('/career-ops offer-prep') &&
   /Applies to:.*`offer-prep`/.test(routerSkill) &&
   !/Modes delegated to subagent[\s\S]*offer-prep/.test(routerSkill)
 ) {
-  pass('router skill registers offer-prep (argument-hint, routing table, menu, standalone list; never subagent-delegated)');
+  pass('router skill registers offer-prep (routing table, menu, standalone list; never subagent-delegated)');
 } else {
   fail('router skill missing offer-prep registration (or offer-prep leaked into the subagent-delegated section)');
 }
@@ -12417,12 +12418,11 @@ for (const skillPath of ['.claude/skills/career-ops/SKILL.md', '.agents/skills/c
   if (!fileExists(skillPath)) continue; // existence already checked in section 8
   const skill = readFile(skillPath);
   if (
-    /argument-hint:[^\n]*titles/.test(skill) &&
     skill.includes('| `titles` | `titles` |') &&
     skill.includes('/career-ops titles') &&
     /Standalone modes[\s\S]*Applies to:[^\n]*`titles`/.test(skill)
   ) {
-    pass(`${skillPath} exposes /career-ops titles in argument-hint, routing, discovery, and standalone loading`);
+    pass(`${skillPath} exposes /career-ops titles in routing, discovery, and standalone loading`);
   } else {
     fail(`${skillPath} does not fully expose /career-ops titles`);
   }

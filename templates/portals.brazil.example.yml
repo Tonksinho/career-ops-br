@@ -1,0 +1,125 @@
+# Career-Ops BR — fontes de vagas para o mercado brasileiro
+# Copie para `portals.yml` e personalize títulos, cidades e empresas.
+#
+# Gupy: prefira o MCP oficial de candidatos quando disponível:
+#   https://candidates.mcp.api.gupy.io/mcp
+# A API REST de listagem da Gupy exige Bearer token; este template não contorna
+# autenticação nem raspa áreas privadas. As consultas abaixo usam páginas públicas.
+
+scan_history:
+  recheck_after_days: 30
+
+location_filter:
+  always_allow:
+    - "Brazil"
+    - "Brasil"
+    - "Remote - Brazil"
+    - "Remoto - Brasil"
+  allow:
+    - "Remote"
+    - "Remoto"
+    - "Brazil"
+    - "Brasil"
+    - "São Paulo"
+    - "Rio de Janeiro"
+    - "Belo Horizonte"
+    - "Curitiba"
+    - "Florianópolis"
+    - "Porto Alegre"
+    - "Recife"
+  block:
+    - "US only"
+    - "United States only"
+    - "Europe only"
+
+max_posting_age_days: 45
+
+trust_filter:
+  enabled: true
+
+title_filter:
+  positive:
+    - "Software Engineer"
+    - "Engenheiro de Software"
+    - "Desenvolvedor"
+    - "Developer"
+    - "Backend"
+    - "Frontend"
+    - "Full Stack"
+    - "Data Engineer"
+    - "Engenheiro de Dados"
+    - "Machine Learning"
+    - "AI Engineer"
+    - "Engenheiro de IA"
+    - "DevOps"
+    - "SRE"
+    - "Product Manager"
+    - "Gerente de Produto"
+    - "Solutions Architect"
+    - "Arquiteto de Soluções"
+  negative:
+    - "Estágio"
+    - "Intern"
+    - "Jovem Aprendiz"
+  seniority_boost:
+    - "Sênior"
+    - "Senior"
+    - "Staff"
+    - "Principal"
+    - "Lead"
+
+search_queries:
+  - name: "Gupy — tecnologia Brasil"
+    query: 'site:gupy.io ("engenheiro de software" OR "desenvolvedor" OR "engenheiro de dados" OR "machine learning") (Brasil OR remoto)'
+    enabled: true
+  - name: "LinkedIn — tecnologia Brasil"
+    query: 'site:linkedin.com/jobs ("software engineer" OR "engenheiro de software" OR "data engineer") (Brazil OR Brasil OR remoto)'
+    enabled: true
+  - name: "Vagas.com — tecnologia"
+    query: 'site:vagas.com.br/vagas-de (desenvolvedor OR "engenheiro de software" OR dados)'
+    enabled: true
+  - name: "Catho — tecnologia"
+    query: 'site:catho.com.br/vagas (desenvolvedor OR "engenheiro de software" OR "engenheiro de dados")'
+    enabled: true
+  - name: "InfoJobs — tecnologia"
+    query: 'site:infojobs.com.br/vagas-de-emprego (desenvolvedor OR "engenheiro de software" OR dados)'
+    enabled: true
+  - name: "Programathor — desenvolvimento"
+    query: 'site:programathor.com.br/jobs (backend OR frontend OR fullstack OR devops OR dados)'
+    enabled: true
+  - name: "Greenhouse — vagas no Brasil"
+    query: 'site:job-boards.greenhouse.io (Brazil OR Brasil OR "São Paulo") (Engineer OR Product OR Data)'
+    enabled: true
+
+tracked_companies:
+  - name: QuintoAndar
+    careers_url: https://carreiras.quintoandar.com.br/
+    api: https://boards-api.greenhouse.io/v1/boards/quintoandar/jobs
+    enabled: true
+  - name: Wildlife Studios
+    careers_url: https://careers.wildlifestudios.com/
+    api: https://boards-api.greenhouse.io/v1/boards/wildlifestudios/jobs
+    enabled: true
+  - name: VTEX
+    careers_url: https://careers.vtex.com/
+    api: https://boards-api.greenhouse.io/v1/boards/vtex/jobs
+    enabled: true
+  - name: Wellhub
+    careers_url: https://wellhub.com/en-us/careers/
+    api: https://boards-api.greenhouse.io/v1/boards/gympass/jobs
+    notes: "O board público ainda usa o slug histórico gympass."
+    enabled: true
+  - name: EBANX
+    careers_url: https://www.ebanx.com/en/careers/
+    api: https://boards-api.greenhouse.io/v1/boards/ebanx/jobs
+    enabled: true
+  - name: Stone
+    careers_url: https://jornada.stone.com.br/
+    api: https://boards-api.greenhouse.io/v1/boards/stone/jobs
+    enabled: true
+  - name: Gupy
+    careers_url: https://portal.gupy.io/
+    scan_method: websearch
+    scan_query: 'site:gupy.io (tecnologia OR produto OR dados) (Brasil OR remoto)'
+    notes: "Use o MCP oficial de candidatos quando configurado; nunca contorne autenticação."
+    enabled: true

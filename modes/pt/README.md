@@ -15,19 +15,21 @@ Se a maioria das suas vagas é em inglês, fique com os modos padrão em `modes/
 
 ## Como ativar?
 
-O career-ops não tem um "switch de idioma" como flag de código. Em vez disso, existem dois caminhos:
+Nesta edição brasileira, `config/profile.example.yml` já ativa `pt-BR` e
+`modes/pt`. Existem dois caminhos para controlar isso:
 
 ### Caminho 1 -- Por sessão, via comando
 
-Diga ao Claude no início da sessão:
+Diga ao agente no início da sessão:
 
 > "Use os modos em português de `modes/pt/`."
 
 ou
 
-> "Avaliar e candidaturas em português -- use `modes/pt/_shared.md` e `modes/pt/oferta.md`."
+> "Avaliações e candidaturas em português — use `modes/pt`."
 
-Claude vai ler os arquivos desta pasta em vez de `modes/`.
+O agente usa o overlay localizado quando ele existe e recorre ao modo-base em
+`modes/` quando ainda não houver um arquivo localizado.
 
 ### Caminho 2 -- Permanente, via perfil
 
@@ -35,28 +37,33 @@ Adicione em `config/profile.yml` uma preferência de idioma:
 
 ```yaml
 language:
-  primary: pt-br
+  output: pt-BR
   modes_dir: modes/pt
 ```
 
-Lembre o Claude na primeira sessão de respeitar esse campo ("Olha no `profile.yml`, eu configurei `language.modes_dir`"). A partir daí, Claude usa automaticamente os modos em português.
-
-> Nota: O campo `language.modes_dir` é uma convenção, não um schema rígido. Se os mantenedores quiserem estruturar diferente, o campo pode ser renomeado a qualquer momento.
+`language.output` controla a língua da saída; `language.modes_dir` controla o
+contexto de mercado. O roteador do skill resolve esses campos automaticamente.
 
 ## O que foi traduzido?
 
-Esta primeira iteração cobre os quatro modos com maior impacto:
+Os fluxos principais do mercado brasileiro estão cobertos:
 
 | Arquivo | Traduzido de | Finalidade |
 |---------|-------------|------------|
 | `_shared.md` | `modes/_shared.md` (EN) | Contexto compartilhado, arquétipos, regras globais, especificidades do mercado BR |
 | `oferta.md` | `modes/oferta.md` (ES) | Avaliação completa de uma vaga (Blocos A-F) |
 | `aplicar.md` | `modes/apply.md` (EN) | Assistente ao vivo para formulários de candidatura |
+| `apply.md` | entrada canônica | Compatibilidade do comando `apply` com `aplicar.md` |
 | `pipeline.md` | `modes/pipeline.md` (ES) | Inbox de URLs / Second Brain para vagas acumuladas |
+| `scan.md` | overlay de `modes/scan.md` | Fontes brasileiras, Gupy MCP e busca pública |
+| `auto-pipeline.md` | overlay do modo-base | Avaliação completa com CLT/PJ e LGPD |
+| `pdf.md` | overlay de `modes/pdf.md` | Currículo A4 em PT-BR e minimização de dados |
+| `tracker.md` | overlay de `modes/tracker.md` | Vínculo, BRL, modalidade e cidade/UF |
+| `remuneracao.md` | modo brasileiro | Comparação transparente de pacote CLT × PJ |
 
-Os demais modos (`scan`, `batch`, `pdf`, `tracker`, `auto-pipeline`, `deep`, `contacto`, `ofertas`, `project`, `training`) não estão neste PR de propósito. Eles continuam funcionando via os originais em EN/ES, pois seu conteúdo é majoritariamente tooling, caminhos e comandos de configuração — que devem ser independentes de idioma.
-
-Se a comunidade adotar os modos em português, mais modos serão traduzidos em PRs futuros.
+Os demais modos continuam funcionando por fallback para os originais. Esse
+modelo reduz divergência: o overlay brasileiro acrescenta contexto local sem
+copiar toda a lógica operacional do upstream.
 
 ## O que continua em inglês?
 

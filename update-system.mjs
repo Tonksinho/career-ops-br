@@ -33,9 +33,11 @@ import { fileURLToPath, pathToFileURL } from 'url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = __dirname;
 
-const CANONICAL_REPO = 'https://github.com/santifer/career-ops.git';
-const RAW_VERSION_URL = 'https://raw.githubusercontent.com/santifer/career-ops/main/VERSION';
-const RELEASES_API = 'https://api.github.com/repos/santifer/career-ops/releases/latest';
+// The Brazilian fork updates from its own release channel. The original
+// project remains configured as the `upstream` git remote for controlled syncs.
+const CANONICAL_REPO = 'https://github.com/Tonksinho/career-ops-br.git';
+const RAW_VERSION_URL = 'https://raw.githubusercontent.com/Tonksinho/career-ops-br/main/VERSION';
+const RELEASES_API = 'https://api.github.com/repos/Tonksinho/career-ops-br/releases/latest';
 
 // Matches a semver, with or without a leading `v` and an optional
 // Release Please component prefix (e.g. `career-ops-v1.9.0` → `1.9.0`).
@@ -148,6 +150,7 @@ const SYSTEM_PATHS = [
   'img-to-pdf.mjs',
   'archive-posting.mjs',
   'application-answers.mjs',
+  'br-compensation.mjs',
   'generate-cover-letter.mjs',
   'merge-tracker.mjs',
   'sync-pdf-flags.mjs',
@@ -284,6 +287,8 @@ const SYSTEM_PATHS = [
   'MAINTAINERS.md',
   'ARCHITECTURE.md',
   'README.md',
+  'README_BRASIL.md',
+  'NOTICE.md',
   'README.ar.md',
   'README.cn.md',
   'README.da.md',

@@ -1,15 +1,11 @@
 ---
 name: career-ops
 description: >-
-  AI job search command center -- evaluate offers, generate CVs, scan portals,
-  track applications. Use when the user pastes a job URL or JD, asks to scan
-  portals, generate a CV/PDF, track applications, prepare for interviews, draft
-  outreach/emails, or run any career-ops mode.
-arguments: mode
-user_invocable: true
-user-invocable: true
-argument-hint: "[scan | discover | deep | pdf | latex | latex-tex | cover | email | add | expand | eu-swe | oferta | ofertas | apply | batch | tracker | agent-inbox | pipeline | contacto | training | project | interview-prep | interview | interview/plan | interview/practice | interview/debrief | interview-redflag | patterns | offer-prep | titles | upskill | followup | reply-watch | outcome | update]"
-license: MIT
+  Brazilian AI job-search command center -- evaluate offers, compare CLT/PJ,
+  generate CVs, scan Brazilian portals, track applications, and apply LGPD-aware
+  safeguards. Use when the user pastes a job URL or JD, asks to scan portals,
+  compare compensation, generate a CV/PDF, track applications, prepare for
+  interviews, draft outreach/emails, or run any career-ops mode.
 ---
 
 # career-ops -- Router
@@ -45,6 +41,7 @@ Determine the mode from `$mode`:
 | `oferta` | `oferta` |
 | `ofertas` | `ofertas` |
 | `contacto` | `contacto` |
+| `remuneracao`, `remuneração`, `clt-pj` | `remuneracao` |
 | `deep` | `deep` |
 | `interview-prep` | `interview-prep` |
 | `interview` | `interview` |
@@ -80,7 +77,7 @@ Determine the mode from `$mode`:
 | `update` | `update` |
 | `cover` | `cover` |
 
-**Auto-pipeline detection:** If `$mode` is not a known sub-command AND contains JD text (keywords: "responsibilities", "requirements", "qualifications", "about the role", "we're looking for", company name + role) or a URL to a JD, execute `auto-pipeline`.
+**Auto-pipeline detection:** If `$mode` is not a known sub-command AND contains JD text (keywords: "responsibilities", "requirements", "qualifications", "about the role", "we're looking for", "responsabilidades", "requisitos", "qualificações", "sobre a vaga", company name + role) or a URL to a JD, execute `auto-pipeline`.
 
 If `$mode` is not a sub-command AND doesn't look like a JD, show discovery.
 
@@ -90,8 +87,8 @@ If `$mode` is not a sub-command AND doesn't look like a JD, show discovery.
 
 Before executing any mode, read `config/profile.yml` if it exists and resolve:
 
-- `language.output` → ISO language code for human-facing output. Default: `en`.
-- `language.modes_dir` → optional market-mode directory. This controls market vocabulary and local evaluation rules only.
+- `language.output` → ISO language code for human-facing output. Default in this fork: `pt-BR`.
+- `language.modes_dir` → optional market-mode directory. Default in this fork: `modes/pt`. This controls market vocabulary and local evaluation rules only.
 
 Inject this directive after loading the mode instructions and before producing any user-visible content:
 
@@ -147,6 +144,7 @@ Available commands:
   /career-ops tracker   → Application status overview
   /career-ops agent-inbox → Queue/drain requests for the next session (data/agent-inbox.md)
   /career-ops apply     → Live application assistant (reads form + generates answers)
+  /career-ops remuneracao → Comparar pacote CLT × PJ com premissas explícitas
   /career-ops scan      → Scan portals and discover new offers
   /career-ops discover  → Resolve a company list to scannable ATS boards + append to portals.yml (zero-token)
   /career-ops batch     → Batch processing with parallel workers
@@ -166,13 +164,21 @@ Or paste a JD directly to run the full pipeline.
 
 ## Context Loading by Mode
 
-After determining the mode, load the necessary files before executing:
+After determining the mode, load the necessary files before executing. Resolve
+`{market_dir}` from `language.modes_dir` (default `modes/pt` in this fork). If
+`{market_dir}/{mode}.md` exists, load it; otherwise fall back to
+`modes/{mode}.md`. A localized overlay may explicitly ask to load the base mode
+first; do so to preserve all safety and data-contract gates.
 
 If `modes/_custom.md` exists, read it after `modes/_profile.md` and before the selected mode file. It contains user house rules and procedural preferences. It may override workflow/style defaults, but it never adds factual claims about the candidate.
 
 ### Modes that require `_shared.md` + their mode file
 
-Read `modes/_shared.md` + `modes/_profile.md` (if exists) + `modes/_custom.md` (if exists) + `modes/{mode}.md`
+Read `{market_dir}/_shared.md` (fallback `modes/_shared.md`) + `modes/_profile.md`
+(if exists) + `modes/_custom.md` (if exists) + the resolved mode file.
+
+Canonical fallback order: `modes/_shared.md` → `modes/_profile.md` →
+`modes/_custom.md` → `modes/{mode}.md`.
 
 Applies to: `auto-pipeline`, `oferta`, `ofertas`, `pdf`, `contacto`, `apply`, `pipeline`, `scan`, `batch`
 
@@ -180,7 +186,7 @@ Applies to: `auto-pipeline`, `oferta`, `ofertas`, `pdf`, `contacto`, `apply`, `p
 
 Read `modes/_profile.md` (if exists) + `modes/_custom.md` (if exists) + `modes/{mode}.md`
 
-Applies to: `tracker`, `agent-inbox`, `deep`, `interview-prep`, `interview`, `regional/eu-swe`, `interview/plan`, `interview/practice`, `interview/debrief`, `latex`, `latex-tex`, `training`, `project`, `patterns`, `titles`, `upskill`, `followup`, `reply-watch`, `outcome`, `cover`, `email`, `add`, `offer-prep`, `discover`
+Applies to: `tracker`, `agent-inbox`, `deep`, `interview-prep`, `interview`, `regional/eu-swe`, `interview/plan`, `interview/practice`, `interview/debrief`, `latex`, `latex-tex`, `training`, `project`, `patterns`, `titles`, `upskill`, `followup`, `reply-watch`, `outcome`, `cover`, `email`, `add`, `offer-prep`, `discover`, `remuneracao`
 
 ### Modes delegated to subagent
 

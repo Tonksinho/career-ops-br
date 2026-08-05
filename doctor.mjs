@@ -249,8 +249,8 @@ const USER_LAYER_PREREQS = [
   {
     path: 'portals.yml',
     fix: [
-      'Run: cp templates/portals.example.yml portals.yml',
-      'Then customize with your target companies',
+      'Run: cp templates/portals.brazil.example.yml portals.yml',
+      'Then customize with your target companies and cities',
     ],
   },
 ];

@@ -1,7 +1,7 @@
 {
-  "name": "career-ops",
-  "version": "1.25.0",
-  "description": "AI-powered job search pipeline — works with any AI coding CLI (Claude Code, Codex, OpenCode, Antigravity, Grok, Qwen, Kimi, Copilot)",
+  "name": "career-ops-br",
+  "version": "1.25.1",
+  "description": "Pipeline de busca de emprego com IA adaptado ao mercado brasileiro — CLT, PJ, LGPD e fontes de vagas do Brasil",
   "private": true,
   "engines": {
     "node": ">=18"
@@ -62,7 +62,8 @@
     "build:dashboard": "node build-dashboard.mjs",
     "serve:dashboard": "cd dashboard && go run . --path ..",
     "postinstall": "npx playwright install chromium --with-deps || npx playwright install chromium --with-deps",
-    "manifesto": "node manifesto.mjs"
+    "manifesto": "node manifesto.mjs",
+    "br:comp": "node br-compensation.mjs"
   },
   "keywords": [
     "ai",
@@ -81,11 +82,11 @@
     "grok",
     "ai-agent-skill"
   ],
-  "author": "Santiago Fernández de Valderrama <hi@santifer.io> (https://santifer.io)",
-  "homepage": "https://santifer.io",
+  "author": "Santiago Fernández de Valderrama <hi@santifer.io> (projeto original); adaptação brasileira por Tonksinho",
+  "homepage": "https://github.com/Tonksinho/career-ops-br",
   "repository": {
     "type": "git",
-    "url": "https://github.com/santifer/career-ops"
+    "url": "https://github.com/Tonksinho/career-ops-br"
   },
   "license": "MIT",
   "dependencies": {

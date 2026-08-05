@@ -29,6 +29,32 @@
 #   sources:            law-firm bulletins / official sources backing the entry
 
 entries:
+  - jurisdiction: BR-federal
+    jurisdiction_name: "Brasil — âmbito federal"
+    prohibited: >-
+      Exigir em anúncio, currículo, ficha ou formulário informação pessoal
+      sobre sexo, raça/cor/etnia, origem, idade, situação familiar, gravidez,
+      deficiência, estado civil, religião, convicção política ou filosófica,
+      atividade sindical ou tema equivalente quando não houver relação direta
+      e necessária com a aptidão ou com requisito legítimo da função.
+    matching: >-
+      Dispara quando o anúncio ou formulário torna obrigatório um dado pessoal
+      protegido ou desnecessário para avaliar aptidão, por exemplo data de
+      nascimento, estado civil, planos de gravidez ou religião. Não dispara
+      automaticamente sobre autodeclaração voluntária e separada para ação
+      afirmativa, pedido de adaptação razoável, cota legal, confirmação de idade
+      mínima legal ou requisito profissional genuíno. O contexto e eventuais
+      exceções não podem ser certificados apenas pelo texto; produza alerta
+      informativo, nunca uma conclusão de ilegalidade.
+    legal_basis: >-
+      Lei nº 9.029/1995, art. 1º, e Consolidação das Leis do Trabalho,
+      art. 373-A, especialmente incisos I, II e IV
+    effective: "1995-04-13"
+    sources:
+      - "https://www.planalto.gov.br/ccivil_03/leis/l9029.htm"
+      - "https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm"
+      - "https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/manuais-e-publicacoes/2020/perguntas_e_respostas_sobre_discriminacao_no_trabalho.pdf/view"
+
   - jurisdiction: CA-ON
     jurisdiction_name: "Ontario, Canada"
     prohibited: >-

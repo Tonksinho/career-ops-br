@@ -9,6 +9,7 @@ All scripts live in the project root as `.mjs` modules. Most are exposed via
 | Command | Script | Purpose |
 |---------|--------|---------|
 | `npm run doctor` | `doctor.mjs` | Validate setup prerequisites |
+| `npm run br:comp -- --clt 12000 --pj 18000` | `br-compensation.mjs` | Estimate and compare annual Brazilian CLT/PJ packages |
 | `npm run verify` | `verify-pipeline.mjs` | Check pipeline data integrity |
 | `npm run normalize` | `normalize-statuses.mjs` | Fix non-canonical statuses |
 | `npm run dedup` | `dedup-tracker.mjs` | Remove duplicate tracker entries |

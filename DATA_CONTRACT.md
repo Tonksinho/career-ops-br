@@ -104,6 +104,7 @@ These files contain system logic, scripts, templates, and instructions that impr
 | `modes/nl/*` | Dutch language modes |
 | `modes/pl/*` | Polish language modes |
 | `modes/pt/*` | Portuguese language modes |
+| `br-compensation.mjs` | Brazilian CLT × PJ package estimator; reads only CLI values and never personal files |
 | `modes/ru/*` | Russian language modes |
 | `modes/tr/*` | Turkish language modes |
 | `modes/ua/*` | Ukrainian language modes |
@@ -136,6 +137,7 @@ These files contain system logic, scripts, templates, and instructions that impr
 | `.grok/skills/*` | Skill definitions (Grok Build CLI) |
 | `docs/*` | Documentation |
 | `VERSION` | Current version number |
+| `README_BRASIL.md` / `NOTICE.md` | Brazilian fork guide and upstream attribution |
 | `DATA_CONTRACT.md` | This file |
 | `writing-samples/README.md` | System-owned onboarding documentation for the writing-samples directory |
 | `seed-fixture.mjs` / `test-fixtures/*` | Upgrade-test fixtures and seeder (system layer; fictional data, never user data) |

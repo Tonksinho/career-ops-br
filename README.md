@@ -6,6 +6,11 @@
 
 </div>
 
+> **Brazilian fork:** this repository defaults to Portuguese (Brazil), BRL,
+> Brazilian job sources, CLT/PJ comparison, and LGPD-aware safeguards. Start at
+> [README_BRASIL.md](README_BRASIL.md). Original project:
+> [santifer/career-ops](https://github.com/santifer/career-ops).
+
 <p align="center">
   <a href="https://x.com/santifer"><img src="docs/hero-banner.jpg" alt="career-ops Multi-Agent Job Search System" width="800"></a>
 </p>
@@ -152,8 +157,8 @@ claude   # or codex / qwen / opencode / agy / grok — open your AI CLI here
 <summary><b>Prefer to set it up manually? (git clone)</b></summary>
 
 ```bash
-git clone https://github.com/santifer/career-ops.git
-cd career-ops && npm install
+git clone https://github.com/Tonksinho/career-ops-br.git
+cd career-ops-br && npm install
 npx playwright install chromium   # only needed for PDF generation
 
 # 2. Check setup
@@ -161,7 +166,7 @@ npm run doctor                     # Validates all prerequisites
 
 # 3. Configure
 cp config/profile.example.yml config/profile.yml  # Edit with your details
-cp templates/portals.example.yml portals.yml       # Customize companies
+cp templates/portals.brazil.example.yml portals.yml # Customize companies/cities
 
 # 4. Add your CV
 # Create cv.md in the project root with your CV in markdown

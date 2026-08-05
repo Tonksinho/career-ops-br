@@ -1,5 +1,12 @@
 # Modo: aplicar -- Assistente de Candidatura ao Vivo
 
+> **Privacidade BR:** antes de preencher, aplique finalidade e necessidade da
+> LGPD. Não grave ou responda automaticamente CPF, RG, data de nascimento,
+> filiação, biometria, laudos, saúde, religião, opinião política ou outros dados
+> sensíveis. Quando um campo parecer excessivo ou protegido, mostre o alerta,
+> explique que o contexto pode admitir exceções e deixe a decisão com a pessoa.
+> Consulte `templates/jurisdiction-prohibited-content.yml` para `BR-federal`.
+
 Modo interativo para quando o candidato está preenchendo um formulário de candidatura no Chrome. Lê o que está na tela, carrega o contexto da avaliação prévia da vaga e gera respostas personalizadas para cada pergunta do formulário.
 
 ## Requisitos

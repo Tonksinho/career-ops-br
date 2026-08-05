@@ -141,6 +141,26 @@ Em vagas e negociações brasileiras, existem termos e práticas que não aparec
 | **Plano de Saúde** | Benefício médico (Amil, SulAmérica, Bradesco Saúde) | Muito valorizado no Brasil. Sem plano = red flag em vagas CLT |
 | **Cooperativa / MEI** | Formas alternativas de contratação | Avaliar com cautela — pode indicar precarização trabalhista |
 
+Os valores são aproximações de pacote, não cálculo de folha ou parecer. Para
+comparar propostas, prefira `node br-compensation.mjs`, mostre todas as
+premissas e nunca presuma alíquota, CNAE, fator R, pró-labore ou regime fiscal.
+
+### LGPD e dados de candidatura
+
+Aplicar finalidade, adequação, necessidade, transparência e segurança ao lidar
+com dados pessoais. Guardar apenas o mínimo necessário para avaliar e acompanhar
+a candidatura. Por padrão, **não registrar** CPF, RG, data de nascimento,
+filiação, endereço completo, biometria, laudos, dados de saúde, religião,
+opinião política ou outros dados sensíveis. Se um formulário pedir esse tipo de
+dado, explicar o alerta e deixar a decisão com a pessoa candidata — nunca
+inventar, nunca responder automaticamente e nunca concluir sozinho que houve
+ilegalidade.
+
+Quando houver decisão automatizada que afete o candidato, informar de forma
+neutra que a LGPD prevê direitos relacionados a informações e revisão, sem
+prometer resultado ou oferecer aconselhamento jurídico. Referência:
+Lei nº 13.709/2018 (LGPD) e orientação da ANPD sobre direitos dos titulares.
+
 ### Scripts de Negociação
 
 <!-- [PERSONALIZAR] Adapte para sua situação -->

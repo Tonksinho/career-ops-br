@@ -90,6 +90,7 @@ AI-powered, CLI-agnostic job search automation: pipeline tracking, offer evaluat
 | `interview-prep/story-bank.md` | Accumulated STAR+R stories |
 | `interview-prep/{company}-{role}.md` | Company-specific interview intel |
 | `generate-pdf.mjs` | Playwright: HTML to PDF |
+| `br-compensation.mjs` | Estimador brasileiro de pacote CLT × PJ com premissas informadas pelo usuário |
 | `generate-latex.mjs` | LaTeX CV validator + pdflatex compiler |
 | `scan.mjs` | Zero-token portal scanner (Greenhouse/Ashby/Lever APIs, zero LLM cost) |
 | `scan-ats-full.mjs` | Reverse-ATS keyword-first scanner over full public ATS datasets (Greenhouse/Lever/Ashby/Workday/iCIMS), filtered by portals.yml `title_filter`/`location_filter` — no company list needed; checkpoints every 500 companies, `--resume` continues an interrupted sweep |
@@ -169,7 +170,7 @@ Fill in `config/profile.yml` (including `spend_tier`, default `standard`). Arche
 If `portals.yml` is missing:
 > "I'll set up the job scanner with 45+ pre-configured companies. Want me to customize the search keywords for your target roles?"
 
-Copy `templates/portals.example.yml` → `portals.yml`; if they gave target roles in Step 2, update `title_filter.positive`.
+Copy `templates/portals.brazil.example.yml` → `portals.yml`; if they gave target roles in Step 2, update `title_filter.positive` and the desired Brazilian cities.
 
 #### Step 4: Tracker
 If `data/applications.md` doesn't exist, create it:
@@ -235,6 +236,7 @@ Default modes are in `modes/` (English). Market-specific mode sets (each include
 | Japanese (Japan) | `modes/ja/` | `kyujin` / `oubo` | 正社員, 賞与, みなし残業, 年俸制, 36協定 |
 | Turkish (Turkey) | `modes/tr/` | `is-ilani` / `basvuru` | SGK, kıdem tazminatı, brüt/net maaş, BES |
 | Hindi (India) | `modes/hi/` | `naukri` / `aavedan` | CTC vs. in-hand, PF/EPF, Notice period/buyout, ESOPs |
+| Portuguese (Brazil) | `modes/pt/` | `oferta` / `apply` | CLT/PJ, 13º, férias + 1/3, FGTS, PLR, LGPD |
 
 ### Output Language vs Market Modes
 
@@ -242,13 +244,13 @@ Default modes are in `modes/` (English). Market-specific mode sets (each include
 
 ```yaml
 language:
-  output: en
-  modes_dir: modes/de
+  output: pt-BR
+  modes_dir: modes/pt
 ```
 
 Two separate axes:
 
-- `language.output` controls **human-facing output**: reports, tracker notes, PDFs, cover letters, outreach, interview prep, form answers, any user-visible prose. Default: `en` when absent.
+- `language.output` controls **human-facing output**: reports, tracker notes, PDFs, cover letters, outreach, interview prep, form answers, any user-visible prose. Default in this fork: `pt-BR` when absent.
 - `language.modes_dir` controls **market vocabulary and local evaluation rules** (e.g. `modes/de` supplies DACH concepts like 13. Monatsgehalt).
 
 **Composition rule:** `language.output` is authoritative for prose; `modes_dir` only supplies market context. English output with DACH vocabulary, French output with Japan-market vocabulary — any combination is valid.
@@ -273,6 +275,7 @@ Two separate axes:
 | Asks to compare offers | `ofertas` |
 | Wants LinkedIn outreach | `contacto` — identifies hiring manager, recruiter, or team peers via web search; drafts a ≤300-char message tailored to the contact type (recruiter / hiring manager / peer / interviewer) |
 | Wants a formal application email | `email` — draft-only subject, body, attachment checklist, and contact block from a report or JD; never sends, submits, or clicks anything |
+| Wants to compare CLT and PJ | `remuneracao` — transparent annual package estimate via `br-compensation.mjs`; not tax/legal/accounting advice |
 | Asks for company research | `deep` — structured 6-axis research prompt (AI strategy, recent moves, engineering culture, likely challenges, competitors, candidate's angle) |
 | Preps for interview at specific company | `interview-prep` |
 | Wants a time-blocked prep plan for an upcoming interview | `interview/plan` |

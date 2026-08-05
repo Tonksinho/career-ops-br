@@ -69,6 +69,42 @@
 #                  state, not one EU row
 
 protected_grounds:
+  - jurisdiction: BR-federal
+    jurisdiction_name: "Brasil — âmbito federal"
+    grounds:
+      - topic: "sexo, gênero e gravidez"
+        example_question_patterns:
+          - "Você está grávida ou pretende ter filhos?"
+        legitimate_contexts:
+          - "Ações afirmativas previstas em lei ou política pública e requisitos profissionais genuínos devem ser avaliados no contexto concreto"
+      - topic: "origem, raça, cor, etnia e nacionalidade"
+        example_question_patterns:
+          - "Qual é a sua raça/origem familiar?"
+      - topic: "idade"
+        example_question_patterns:
+          - "Qual é a sua idade ou data de nascimento?"
+        legitimate_contexts:
+          - "Confirmação de idade mínima legal quando ela for requisito real para a atividade"
+      - topic: "estado civil e situação familiar"
+        example_question_patterns:
+          - "É casado(a)? Tem filhos ou com quem eles ficam?"
+      - topic: "deficiência ou reabilitação profissional"
+        legitimate_contexts:
+          - "Ações afirmativas/cotas e conversa sobre adaptação razoável, limitada às funções essenciais da vaga"
+      - topic: "religião e convicção política ou filosófica"
+      - topic: "filiação sindical"
+    legal_basis: >-
+      Constituição Federal, art. 7º, XXX e XXXI; Lei nº 9.029/1995, art. 1º;
+      e CLT, art. 373-A. O guia oficial do Ministério do Trabalho e Emprego
+      orienta que fichas, currículos e entrevistas não exijam informações
+      pessoais sem relação direta com aptidão e necessidade da função.
+    sources:
+      - "https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/combate_a_discriminacao"
+      - "https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/inspecao-do-trabalho/manuais-e-publicacoes/2020/perguntas_e_respostas_sobre_discriminacao_no_trabalho.pdf/view"
+      - "https://www.planalto.gov.br/ccivil_03/leis/l9029.htm"
+      - "https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm"
+    as_of: "2026-08-04"
+
   - jurisdiction: CA-ON
     jurisdiction_name: "Ontario, Canada"
     grounds:

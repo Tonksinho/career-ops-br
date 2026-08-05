@@ -6,6 +6,11 @@
 
 </div>
 
+> **Edição brasileira:** veja o guia específico em
+> [README_BRASIL.md](README_BRASIL.md). Este fork usa PT-BR, BRL, fontes de vagas
+> brasileiras, comparação CLT/PJ e cuidados de LGPD por padrão. Projeto original:
+> [santifer/career-ops](https://github.com/santifer/career-ops).
+
 <p align="center">
   <a href="https://x.com/santifer"><img src="docs/hero-banner.jpg" alt="career-ops Multi-Agent Job Search System" width="800"></a>
 </p>
@@ -98,20 +103,19 @@ Construído por alguém que usou isso para avaliar 740+ vagas, gerar 100+ CVs pe
 
 ## Início rápido
 
-**Forma mais rápida — um único comando:**
+**Instalação desta edição brasileira:**
 
 ```bash
-npx @santifer/career-ops init
+git clone https://github.com/Tonksinho/career-ops-br.git
+cd career-ops-br
+npm install
+cp config/profile.example.yml config/profile.yml
+cp templates/portals.brazil.example.yml portals.yml
 ```
 
-> 💡 `npx` já vem com o [Node.js](https://nodejs.org) — ele roda o instalador uma vez,
-> sem instalar nada globalmente. Ainda não tem Node? Instale-o primeiro.
-> (Já usa uma CLI Claude Code / Gemini / Codex? Então você já tem.)
-
-Isso clona o último release em `./career-ops` e instala as dependências. Depois:
+Depois:
 
 ```bash
-cd career-ops
 claude   # ou gemini / codex / qwen / opencode — abra sua CLI de IA aqui
 ```
 
@@ -121,8 +125,8 @@ claude   # ou gemini / codex / qwen / opencode — abra sua CLI de IA aqui
 <summary><b>Prefere configurar manualmente? (git clone)</b></summary>
 
 ```bash
-git clone https://github.com/santifer/career-ops.git
-cd career-ops && npm install
+git clone https://github.com/Tonksinho/career-ops-br.git
+cd career-ops-br && npm install
 npx playwright install chromium   # necessário apenas para geração de PDF
 claude
 ```
@@ -178,7 +182,10 @@ Você cola a URL ou descrição da vaga
 
 ## Portais pré-configurados
 
-O scanner já vem com **45+ empresas** prontas para escanear e **19 consultas de busca** nos principais job boards. Copie `templates/portals.example.yml` para `portals.yml` e adicione as suas:
+O template brasileiro inclui consultas de Gupy, LinkedIn, Vagas.com, Catho,
+InfoJobs e Programathor, além de APIs públicas verificadas de empresas com
+operação no Brasil. Copie `templates/portals.brazil.example.yml` para
+`portals.yml` e personalize títulos, cidades e empresas.
 
 **AI Labs:** Anthropic, OpenAI, Mistral, Cohere, LangChain, Pinecone
 **Voice AI:** ElevenLabs, PolyAI, Parloa, Hume AI, Deepgram, Vapi, Bland AI
