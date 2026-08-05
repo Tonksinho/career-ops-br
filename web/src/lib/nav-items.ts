@@ -11,14 +11,14 @@ export type NavItem = {
 };
 
 export const NAV_ITEMS: NavItem[] = [
-  { href: "/", label: "Today", icon: LayoutDashboard },
-  { href: "/explore", label: "Explore", icon: Compass, chip: "New" },
+  { href: "/", label: "Hoje", icon: LayoutDashboard },
+  { href: "/explore", label: "Explorar", icon: Compass, chip: "Novo" },
   { href: "/pipeline", label: "Pipeline", icon: ListChecks },
-  { href: "/followups", label: "Follow-ups", icon: Send },
-  { href: "/portals", label: "Portals", icon: Radar },
-  { href: "/analytics", label: "Analytics", icon: BarChart3 },
-  { href: "/cv", label: "CV", icon: FileText },
-  { href: "/config", label: "Config", icon: Settings },
+  { href: "/followups", label: "Acompanhamentos", icon: Send },
+  { href: "/portals", label: "Portais", icon: Radar },
+  { href: "/analytics", label: "Análises", icon: BarChart3 },
+  { href: "/cv", label: "Currículo", icon: FileText },
+  { href: "/config", label: "Configurações", icon: Settings },
 ];
 
 export function isActivePath(href: string, pathname: string): boolean {

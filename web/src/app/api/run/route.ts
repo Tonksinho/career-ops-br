@@ -77,15 +77,15 @@ export async function POST(req: Request) {
   try {
     body = await req.json();
   } catch {
-    return new Response(JSON.stringify({ error: "bad json" }), { status: 400 });
+    return new Response(JSON.stringify({ error: "JSON inválido" }), { status: 400 });
   }
   const { kind = "evaluate", input, cliId } = body;
   if (!input || !cliId) {
-    return new Response(JSON.stringify({ error: "input and cliId required" }), { status: 400 });
+    return new Response(JSON.stringify({ error: "input e cliId são obrigatórios" }), { status: 400 });
   }
   const resolved = resolveCli(cliId);
   if (!resolved) {
-    return new Response(JSON.stringify({ error: `CLI '${cliId}' not found` }), {
+    return new Response(JSON.stringify({ error: `CLI “${cliId}” não encontrada` }), {
       status: 404,
       headers: { "Content-Type": "application/json" },
     });
@@ -99,7 +99,7 @@ export async function POST(req: Request) {
   if (required && !fs.existsSync(path.join(careerOpsRoot(), required))) {
     return new Response(
       JSON.stringify({
-        error: `This needs a complete career-ops checkout (${required}). CAREER_OPS_ROOT has data only — point it at a full checkout.`,
+        error: `Esta tarefa precisa de uma instalação completa do career-ops (${required}). CAREER_OPS_ROOT contém apenas dados — aponte para uma instalação completa.`,
       }),
       { status: 400, headers: { "Content-Type": "application/json" } },
     );
@@ -109,7 +109,7 @@ export async function POST(req: Request) {
   // hallucinate a fit narrative and still emit a VERDICT. Require cv.md first.
   if ((kind === "evaluate" || kind === "pdf") && !fs.existsSync(path.join(careerOpsRoot(), "cv.md"))) {
     return new Response(
-      JSON.stringify({ error: "Add your CV first so I can score this against you — drop it on the home page." }),
+      JSON.stringify({ error: "Adicione seu currículo primeiro para que eu possa avaliar a compatibilidade — envie-o pela página inicial." }),
       { status: 400, headers: { "Content-Type": "application/json" } },
     );
   }
@@ -324,7 +324,7 @@ export async function POST(req: Request) {
           for (const w of result.warnings) send({ type: "text", text: `⚠️ ${w}\n` });
           send({ type: "done", tokens: lastTokens, costUsd: lastCostUsd });
         } catch (e) {
-          send({ type: "error", msg: `PDF rendering crashed unexpectedly: ${e instanceof Error ? e.message : String(e)}`.slice(0, 200) });
+          send({ type: "error", msg: `A geração do PDF falhou inesperadamente: ${e instanceof Error ? e.message : String(e)}`.slice(0, 200) });
         } finally {
           close();
         }
@@ -343,8 +343,8 @@ export async function POST(req: Request) {
         // all is the same failure mode whether it was evaluating or tailoring
         // a PDF — one place for the condition/message pair instead of two.
         const noOutputError = (): string | null => {
-          if (!emittedText && !sawError && !cleanExit) return "The CLI exited with an error — is it installed and authenticated?";
-          if (!emittedText && !sawError) return "The CLI produced no output — is it installed and authenticated? (career-ops is best on Claude Code.)";
+          if (!emittedText && !sawError && !cleanExit) return "A CLI encerrou com erro — ela está instalada e autenticada?";
+          if (!emittedText && !sawError) return "A CLI não produziu resposta — ela está instalada e autenticada? (O career-ops funciona melhor com Claude Code.)";
           return null;
         };
 

@@ -70,13 +70,13 @@ function buildPrompt(title: string, cands: Cand[]): string {
   return `You are interpreting a LIVE job-application form (${title}) so it can be re-rendered cleanly. Below is EVERY interactive control with its surrounding text. For EACH control decide:
 - "skip": true if it is NOT a real application field to fill (a search/filter box, navigation, cookie/consent control, social-login button, or decorative widget).
 - otherwise give: "label" (the human question in plain words, cleaned of asterisks/option text), "type" (one of: text, email, tel, url, number, date, textarea, select, radio, checkbox, file), "options" (ONLY for select/radio — the exact visible option texts), "required" (boolean).
-Infer the TYPE from meaning (e.g. a "Resume/CV" upload = file; a custom dropdown = select; "Why us?" = textarea). Use the EXACT option texts shown.
+Infer the TYPE from meaning (e.g. a "Resume/CV" upload = file; a custom dropdown = select; "Why us?" = textarea). Write every human-facing field label in natural Brazilian Portuguese. Keep the EXACT option texts shown because they must match the real form.
 
 CONTROLS:
 ${lines}
 
 Return ONLY a JSON array, no prose, no code fence:
-[{"n":0,"skip":false,"label":"First Name","type":"text","options":[],"required":true}, ...]`;
+[{"n":0,"skip":false,"label":"Nome","type":"text","options":[],"required":true}, ...]`;
 }
 
 function runPlanner(binPath: string, isClaude: boolean, argsFor: (p: string) => string[], prompt: string): Promise<string> {

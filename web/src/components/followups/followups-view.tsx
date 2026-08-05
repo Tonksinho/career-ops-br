@@ -29,17 +29,19 @@ import { cn } from "@/lib/cn";
 
 const URGENCY_TABS = ["ALL", "OVERDUE", "URGENT", "WAITING", "COLD"] as const;
 type UrgencyTab = (typeof URGENCY_TABS)[number];
+const URGENCY_LABEL: Record<string, string> = { ALL: "TODOS", OVERDUE: "ATRASADOS", URGENT: "URGENTES", WAITING: "AGUARDANDO", COLD: "FRIOS", overdue: "atrasado", urgent: "urgente", waiting: "aguardando", cold: "frio" };
+const FOLLOWUP_STATUS_LABEL: Record<string, string> = { applied: "Candidatura enviada", responded: "Com resposta", interview: "Entrevista" };
 
 const COLUMNS = [
-  { key: "company", label: "Company" },
-  { key: "role", label: "Role" },
-  { key: "score", label: "Score" },
+  { key: "company", label: "Empresa" },
+  { key: "role", label: "Cargo" },
+  { key: "score", label: "Pontuação" },
   { key: "status", label: "Status" },
-  { key: "urgency", label: "Urgency" },
-  { key: "days", label: "Days since app" },
-  { key: "next", label: "Next follow-up" },
-  { key: "count", label: "Follow-ups done" },
-  { key: "since", label: "Days since F/U" },
+  { key: "urgency", label: "Urgência" },
+  { key: "days", label: "Dias desde candidatura" },
+  { key: "next", label: "Próximo contato" },
+  { key: "count", label: "Contatos feitos" },
+  { key: "since", label: "Dias desde contato" },
 ] as const;
 type SortKey = (typeof COLUMNS)[number]["key"];
 const SORT_KEYS = COLUMNS.map((c) => c.key);
@@ -162,10 +164,10 @@ export function FollowupsView() {
       });
       if (!res.ok) {
         const j = (await res.json().catch(() => ({}))) as { error?: string };
-        setActionError(typeof j.error === "string" ? `Couldn't remove the follow-up: ${j.error}` : "Couldn't remove the follow-up.");
+        setActionError(typeof j.error === "string" ? `Não foi possível remover o contato: ${j.error}` : "Não foi possível remover o contato.");
       }
     } catch {
-      setActionError("Couldn't remove the follow-up.");
+      setActionError("Não foi possível remover o contato.");
     }
     refetch();
   };
@@ -180,15 +182,15 @@ export function FollowupsView() {
 
   const subtitle = !data ? (
     <span className="inline-flex items-center gap-1.5">
-      <Loader2 className="size-3.5 animate-spin" /> Computing cadence…
+      <Loader2 className="size-3.5 animate-spin" /> Calculando cadência…
     </span>
   ) : !data.available || !meta ? (
-    "Cadence unavailable"
+    "Cadência indisponível"
   ) : (
     <>
-      <span className="tabular-nums">{meta.actionable}</span> active ·{" "}
-      <span className="tabular-nums">{meta.urgent}</span> urgent ·{" "}
-      <span className="tabular-nums">{meta.overdue}</span> overdue
+      <span className="tabular-nums">{meta.actionable}</span> ativos ·{" "}
+      <span className="tabular-nums">{meta.urgent}</span> urgentes ·{" "}
+      <span className="tabular-nums">{meta.overdue}</span> atrasados
     </>
   );
 
@@ -196,7 +198,7 @@ export function FollowupsView() {
     <div className="mx-auto max-w-none px-6 py-8">
       <div className="flex items-end justify-between gap-4">
         <div>
-          <h1 className="font-display text-2xl tracking-tight text-landing">Follow-up Tracker</h1>
+          <h1 className="font-display text-2xl tracking-tight text-landing">Acompanhamento de contatos</h1>
           <p className="mt-1 text-sm text-muted">{subtitle}</p>
         </div>
         <div className="relative w-56 max-w-[35vw]">
@@ -204,7 +206,7 @@ export function FollowupsView() {
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            placeholder="Search company or role…"
+            placeholder="Buscar empresa ou cargo…"
             className="w-full rounded-md border border-border bg-surface/60 py-2 pl-9 pr-3 text-sm outline-none transition-colors placeholder:text-faint focus:border-brand/50 focus-visible:ring-2 focus-visible:ring-brand/40"
           />
         </div>
@@ -225,7 +227,7 @@ export function FollowupsView() {
                 tab === t ? "border-brand text-foreground" : "border-transparent text-muted hover:text-foreground",
               )}
             >
-              {t} <span className="text-faint tabular-nums">{count}</span>
+              {URGENCY_LABEL[t]} <span className="text-faint tabular-nums">{count}</span>
             </button>
           );
         })}
@@ -234,12 +236,12 @@ export function FollowupsView() {
       {actionError && <p className="mt-3 text-xs text-red-500">{actionError}</p>}
 
       {!data ? null : !data.available ? (
-        <EmptyPanel title="Cadence unavailable" body="The cadence engine (followup-cadence.mjs) returned nothing — check that the core scripts are present." />
+        <EmptyPanel title="Cadência indisponível" body="O mecanismo de cadência não retornou dados — verifique se os scripts principais estão presentes." />
       ) : filtered.length === 0 ? (
         filtering ? (
-          <EmptyPanel title="No matches" body="Try a different urgency filter or clear the search." />
+          <EmptyPanel title="Nenhum resultado" body="Tente outro filtro de urgência ou limpe a busca." />
         ) : (
-          <EmptyPanel title="Nothing to chase" body="No active applications need a follow-up. Apply to roles (or update statuses) and the cadence starts tracking them." />
+          <EmptyPanel title="Nada para acompanhar" body="Nenhuma candidatura ativa precisa de contato. Envie candidaturas ou atualize os status para iniciar o acompanhamento." />
         )
       ) : (
         <div className="mt-4 overflow-x-auto rounded-2xl border border-border">
@@ -268,7 +270,7 @@ export function FollowupsView() {
                     </th>
                   );
                 })}
-                <th className="px-2.5 py-2.5 font-medium">Action</th>
+                <th className="px-2.5 py-2.5 font-medium">Ação</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
@@ -306,13 +308,13 @@ function NarrativeCard({ meta, entries }: { meta: CadenceMetadata; entries: Cade
     .slice(0, 4);
 
   const parts: string[] = [];
-  if (meta.overdue > 0) parts.push(`Overdue follow-ups: ${meta.overdue}`);
-  if (meta.urgent > 0) parts.push(`Urgent: ${meta.urgent}`);
+  if (meta.overdue > 0) parts.push(`Contatos atrasados: ${meta.overdue}`);
+  if (meta.urgent > 0) parts.push(`Urgentes: ${meta.urgent}`);
   if (pressing.length > 0) {
-    parts.push(`most pressing today: ${oxfordJoin(pressing.map((e) => `${e.company} (#${e.num})`))}`);
+    parts.push(`mais importantes hoje: ${oxfordJoin(pressing.map((e) => `${e.company} (#${e.num})`))}`);
     const days = pressing.map((e) => e.daysSinceApplication);
     const max = Math.max(...days);
-    parts.push(days.every((d) => d === max) ? `all ${max} days since applied` : `up to ${max} days since applied`);
+    parts.push(days.every((d) => d === max) ? `todas há ${max} dias da candidatura` : `até ${max} dias desde a candidatura`);
   }
 
   return (
@@ -342,7 +344,7 @@ function FollowupRow({
   onPin: () => void;
   onRemove: (num: number) => void;
 }) {
-  const statusLabel = e.status.charAt(0).toUpperCase() + e.status.slice(1);
+  const statusLabel = FOLLOWUP_STATUS_LABEL[e.status] ?? e.status;
   const Chevron = expanded ? ChevronDown : ChevronRight;
   return (
     <>
@@ -352,7 +354,7 @@ function FollowupRow({
             type="button"
             onClick={onToggle}
             aria-expanded={expanded}
-            aria-label={`${expanded ? "Hide" : "Show"} follow-up history for ${e.company}`}
+            aria-label={`${expanded ? "Ocultar" : "Mostrar"} histórico de contatos da ${e.company}`}
             className="rounded p-1 text-faint transition hover:text-foreground"
           >
             <Chevron className="size-4" />
@@ -379,7 +381,7 @@ function FollowupRow({
           <Badge tone={followupStatusTone(e.status)}>{statusLabel}</Badge>
         </td>
         <td className="px-2.5 py-3">
-          <Badge tone={urgencyTone(e.urgency)}>{e.urgency}</Badge>
+          <Badge tone={urgencyTone(e.urgency)}>{URGENCY_LABEL[e.urgency] ?? e.urgency}</Badge>
         </td>
         <td className={cn("px-2.5 py-3 tabular-nums", daysHeatClass(e.daysSinceApplication))}>{e.daysSinceApplication}</td>
         <td className="whitespace-nowrap px-2.5 py-3">
@@ -393,8 +395,8 @@ function FollowupRow({
           {e.nextOverride && (
             <span
               className="ml-1.5 inline-flex align-[-1px]"
-              title={`Pinned to ${e.nextOverride} — cleared when you log a follow-up`}
-              aria-label="Pinned manually"
+              title={`Fixado em ${e.nextOverride} — será limpo ao registrar um contato`}
+              aria-label="Fixado manualmente"
             >
               <Pin className="size-3 text-brand" />
             </span>
@@ -409,15 +411,15 @@ function FollowupRow({
             <button
               type="button"
               onClick={onLog}
-              title="Log a follow-up (date, channel, contact, notes)"
+              title="Registrar contato (data, canal, pessoa e observações)"
               className="rounded-md px-2 py-1 text-xs font-medium text-muted transition-colors hover:bg-brand-soft hover:text-brand"
             >
-              Log
+              Registrar
             </button>
             <button
               type="button"
               onClick={onPin}
-              title={e.nextOverride ? `Next date pinned to ${e.nextOverride} — change or clear` : "Pin a custom next follow-up date"}
+              title={e.nextOverride ? `Próxima data fixada em ${e.nextOverride} — alterar ou limpar` : "Fixar a data do próximo contato"}
               className={cn(
                 "rounded-md p-1 transition-colors hover:bg-brand-soft hover:text-brand",
                 e.nextOverride ? "text-brand" : "text-faint",
@@ -446,7 +448,7 @@ function HistoryPanel({ entry: e, onRemove }: { entry: CadenceEntry; onRemove: (
   return (
     <div className="space-y-2 pl-7 text-sm">
       {history.length === 0 ? (
-        <p className="text-faint">No follow-ups logged yet.</p>
+        <p className="text-faint">Nenhum contato registrado ainda.</p>
       ) : (
         <ul className="space-y-1.5">
           {history.map((f, i) => (
@@ -458,8 +460,8 @@ function HistoryPanel({ entry: e, onRemove }: { entry: CadenceEntry; onRemove: (
                   <button
                     type="button"
                     onClick={() => onRemove(f.num!)}
-                    title="Remove this logged follow-up (added by mistake?)"
-                    aria-label={`Remove follow-up logged ${f.date}`}
+                    title="Remover este contato registrado"
+                    aria-label={`Remover contato registrado em ${f.date}`}
                     className="rounded p-0.5 text-faint opacity-0 transition group-hover/item:opacity-100 hover:text-red-500 focus-visible:opacity-100"
                   >
                     <Trash2 className="size-3.5" />
@@ -476,7 +478,7 @@ function HistoryPanel({ entry: e, onRemove }: { entry: CadenceEntry; onRemove: (
       )}
       {e.contacts.length > 0 && (
         <p className="text-xs text-faint">
-          Suggested contacts:{" "}
+          Contatos sugeridos:{" "}
           {e.contacts.map((c, i) => (
             <span key={c.email}>
               {i > 0 && ", "}

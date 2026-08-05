@@ -68,7 +68,7 @@ export function JobsProvider({ children }: { children: React.ReactNode }) {
       const arr = raw ? JSON.parse(raw) : null;
       if (Array.isArray(arr)) {
         // anything left "running" from a previous session is stale → mark interrupted
-        setJobs(arr.map((j: Job) => (j.status === "running" ? { ...j, status: "error", steps: [...(j.steps || []), { kind: "status", label: "Interrupted (page reloaded)", ts: Date.now() }] } : j)));
+        setJobs(arr.map((j: Job) => (j.status === "running" ? { ...j, status: "error", steps: [...(j.steps || []), { kind: "status", label: "Interrompida porque a página foi recarregada", ts: Date.now() }] } : j)));
       }
     } catch {
       /* ignore */
@@ -109,14 +109,14 @@ export function JobsProvider({ children }: { children: React.ReactNode }) {
         kind: opts.kind,
         batchId: opts.batchId,
         status: "running",
-        steps: [{ kind: "status", label: "Starting…", ts: Date.now() }],
+        steps: [{ kind: "status", label: "Iniciando…", ts: Date.now() }],
         text: "",
         startedAt: Date.now(),
       };
       setJobs((js) => [job, ...js]);
 
       if (!cliId) {
-        patch(id, (j) => ({ ...j, status: "error", endedAt: Date.now(), steps: [...j.steps, { kind: "status", label: "No CLI configured — open Config", ts: Date.now() }] }));
+        patch(id, (j) => ({ ...j, status: "error", endedAt: Date.now(), steps: [...j.steps, { kind: "status", label: "Nenhuma CLI configurada — abra Configurações", ts: Date.now() }] }));
         return id;
       }
 
@@ -160,7 +160,7 @@ export function JobsProvider({ children }: { children: React.ReactNode }) {
           });
           if (!res.ok || !res.body) {
             const e = await res.json().catch(() => ({}));
-            finish("error", e.error || "Failed to start");
+            finish("error", e.error || "Falha ao iniciar");
             return;
           }
           const reader = res.body.getReader();
@@ -202,9 +202,9 @@ export function JobsProvider({ children }: { children: React.ReactNode }) {
               }
             }
           }
-          finish("done", "Done");
+          finish("done", "Concluída");
         } catch {
-          finish("error", "Connection error");
+          finish("error", "Erro de conexão");
         }
       })();
 

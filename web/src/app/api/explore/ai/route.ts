@@ -32,14 +32,14 @@ export async function POST(req: Request) {
   try {
     body = await req.json();
   } catch {
-    return Response.json({ error: "bad json" }, { status: 400 });
+    return Response.json({ error: "JSON inválido" }, { status: 400 });
   }
   const query = (body.query || "").trim();
   const cliId = body.cliId;
-  if (!query || !cliId) return Response.json({ error: "query and cliId required" }, { status: 400 });
+  if (!query || !cliId) return Response.json({ error: "Busca e cliId são obrigatórios." }, { status: 400 });
 
   const resolved = resolveCli(cliId);
-  if (!resolved) return Response.json({ error: `CLI '${cliId}' not found on this machine` }, { status: 404 });
+  if (!resolved) return Response.json({ error: `CLI “${cliId}” não encontrada nesta máquina` }, { status: 404 });
   const { spec, binPath } = resolved;
 
   // Read the CANONICAL mode at request time — single source of truth, never a
@@ -48,7 +48,7 @@ export async function POST(req: Request) {
   try {
     mode = fs.readFileSync(path.join(careerOpsRoot(), "modes", "discover.md"), "utf8");
   } catch {
-    return Response.json({ code: "MODE_MISSING", error: "AI search needs a newer career-ops — update to enable it." }, { status: 400 });
+    return Response.json({ code: "MODE_MISSING", error: "A busca com IA precisa de uma versão mais recente do career-ops — atualize para ativá-la." }, { status: 400 });
   }
 
   const { lines } = assembleDedupContext();

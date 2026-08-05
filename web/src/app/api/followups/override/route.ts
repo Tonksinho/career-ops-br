@@ -21,15 +21,15 @@ export async function POST(req: Request) {
   try {
     body = (await req.json()) as typeof body;
   } catch {
-    return Response.json({ error: "bad json" }, { status: 400 });
+    return Response.json({ error: "JSON inválido" }, { status: 400 });
   }
   const appNum = Number.parseInt(String(body.appNum ?? ""), 10);
   if (!Number.isInteger(appNum) || appNum < 0) {
-    return Response.json({ error: "appNum (application #) required" }, { status: 400 });
+    return Response.json({ error: "O número da candidatura é obrigatório." }, { status: 400 });
   }
   const date = (body.date ?? "").trim();
   if (!isRealISODate(date)) {
-    return Response.json({ error: "date must be a real calendar date (YYYY-MM-DD)" }, { status: 400 });
+    return Response.json({ error: "A data deve ser válida no formato AAAA-MM-DD." }, { status: 400 });
   }
 
   const file = followupsLogPath();
@@ -47,7 +47,7 @@ export async function POST(req: Request) {
       return Response.json({ ok: true, appNum, date });
     });
   } catch (e) {
-    return Response.json({ error: e instanceof Error ? e.message : "write failed" }, { status: 500 });
+    return Response.json({ error: e instanceof Error ? e.message : "Falha ao salvar." }, { status: 500 });
   }
 }
 
@@ -57,11 +57,11 @@ export async function DELETE(req: Request) {
   try {
     body = (await req.json()) as typeof body;
   } catch {
-    return Response.json({ error: "bad json" }, { status: 400 });
+    return Response.json({ error: "JSON inválido" }, { status: 400 });
   }
   const appNum = Number.parseInt(String(body.appNum ?? ""), 10);
   if (!Number.isInteger(appNum) || appNum < 0) {
-    return Response.json({ error: "appNum (application #) required" }, { status: 400 });
+    return Response.json({ error: "O número da candidatura é obrigatório." }, { status: 400 });
   }
 
   const file = followupsLogPath();
@@ -77,6 +77,6 @@ export async function DELETE(req: Request) {
       return Response.json({ ok: true, appNum });
     });
   } catch (e) {
-    return Response.json({ error: e instanceof Error ? e.message : "delete failed" }, { status: 500 });
+    return Response.json({ error: e instanceof Error ? e.message : "Falha ao excluir." }, { status: 500 });
   }
 }

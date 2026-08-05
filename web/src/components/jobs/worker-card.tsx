@@ -8,17 +8,17 @@ import { cn } from "@/lib/cn";
 // Humanize raw agent tool names into what the user actually cares about, so a
 // multi-minute evaluation reads as progress instead of a cryptic tool dump (#8).
 const STEP_LABELS: Record<string, string> = {
-  WebFetch: "Reading the posting",
-  WebSearch: "Searching the web",
-  Read: "Reading your CV & profile",
-  Glob: "Looking through your files",
-  Grep: "Looking through your files",
-  Write: "Writing the report",
-  Edit: "Updating the report",
-  NotebookEdit: "Updating the report",
-  Bash: "Saving to your tracker",
-  TodoWrite: "Planning the steps",
-  Task: "Working",
+  WebFetch: "Lendo a vaga",
+  WebSearch: "Pesquisando na web",
+  Read: "Lendo seu currículo e perfil",
+  Glob: "Consultando seus arquivos",
+  Grep: "Consultando seus arquivos",
+  Write: "Escrevendo o relatório",
+  Edit: "Atualizando o relatório",
+  NotebookEdit: "Atualizando o relatório",
+  Bash: "Salvando no tracker",
+  TodoWrite: "Planejando as etapas",
+  Task: "Processando",
 };
 const humanizeStep = (label: string): string => STEP_LABELS[label] ?? label;
 
@@ -123,12 +123,12 @@ export function WorkerCard({
       </div>
       {(bottom || running) && (
         <div className={cn("mt-1 truncate text-faint", inline ? "text-xs" : "text-[10px]")}>
-          {running ? `${last ?? "Working"} · ${fmtElapsed(elapsed)}` : bottom}
+          {running ? `${last ?? "Processando"} · ${fmtElapsed(elapsed)}` : bottom}
         </div>
       )}
       {authError && (
         <div className={cn("mt-1 text-amber-700 dark:text-amber-400", inline ? "text-xs" : "text-[10px]")}>
-          Sign your CLI in from Config, then re-run.
+          Faça login na sua CLI em Configurações e execute novamente.
         </div>
       )}
       {tokens > 0 && (

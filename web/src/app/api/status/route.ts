@@ -15,14 +15,14 @@ export async function POST(req: Request) {
   try {
     body = await req.json();
   } catch {
-    return NextResponse.json({ error: "bad json" }, { status: 400 });
+    return NextResponse.json({ error: "JSON inválido" }, { status: 400 });
   }
   const { n, status } = body;
   if (!n || typeof status !== "string" || !status.trim()) {
-    return NextResponse.json({ error: "n and status required" }, { status: 400 });
+    return NextResponse.json({ error: "Número e status são obrigatórios." }, { status: 400 });
   }
   if (/[|\r\n*]/.test(status)) {
-    return NextResponse.json({ error: "invalid status (table-breaking characters)" }, { status: 400 });
+    return NextResponse.json({ error: "Status inválido: contém caracteres incompatíveis com a tabela." }, { status: 400 });
   }
   const canon = canonicalizeStatus(status);
   if (!canon) {
@@ -34,7 +34,7 @@ export async function POST(req: Request) {
   try {
     md = fs.readFileSync(file, "utf8");
   } catch {
-    return NextResponse.json({ error: "tracker not found" }, { status: 404 });
+    return NextResponse.json({ error: "Tracker não encontrado." }, { status: 404 });
   }
 
   const lines = md.split("\n");
@@ -63,12 +63,12 @@ export async function POST(req: Request) {
     changed = true;
     break;
   }
-  if (!changed) return NextResponse.json({ error: "row not found" }, { status: 404 });
+  if (!changed) return NextResponse.json({ error: "Linha não encontrada." }, { status: 404 });
 
   try {
     atomicWrite(file, lines.join("\n"));
   } catch {
-    return NextResponse.json({ error: "write failed" }, { status: 500 });
+    return NextResponse.json({ error: "Falha ao salvar." }, { status: 500 });
   }
   return NextResponse.json({ ok: true, status: canon });
 }

@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 // the browser. Local-first: reads the user's own output/ dir.
 export async function GET(req: NextRequest) {
   const company = (req.nextUrl.searchParams.get("company") ?? "").trim();
-  if (!company) return new Response("company required", { status: 400 });
+  if (!company) return new Response("A empresa é obrigatória.", { status: 400 });
   // Token-extract instead of replace-then-trim: same slug, and no `-+$`-style
   // pattern that backtracks polynomially on adversarial input (CodeQL).
   const slug = (company.toLowerCase().match(/[a-z0-9]+/g) ?? []).join("-");
@@ -29,7 +29,7 @@ export async function GET(req: NextRequest) {
   } catch {
     return new Response("no output directory", { status: 404 });
   }
-  if (!files.length) return new Response("no tailored CV found for this offer", { status: 404 });
+  if (!files.length) return new Response("Nenhum currículo personalizado foi encontrado para esta vaga.", { status: 404 });
 
   files.sort((a, b) => fs.statSync(path.join(dir, b)).mtimeMs - fs.statSync(path.join(dir, a)).mtimeMs);
   const file = path.join(dir, files[0]);
@@ -40,6 +40,6 @@ export async function GET(req: NextRequest) {
       headers: { "Content-Type": "application/pdf", "Content-Disposition": `inline; filename="${files[0]}"`, "Cache-Control": "no-store" },
     });
   } catch {
-    return new Response("could not read the PDF", { status: 500 });
+    return new Response("Não foi possível ler o PDF.", { status: 500 });
   }
 }

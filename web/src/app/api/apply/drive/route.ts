@@ -14,11 +14,11 @@ export async function POST(req: Request) {
   try {
     body = await req.json();
   } catch {
-    return Response.json({ error: "bad json" }, { status: 400 });
+    return Response.json({ error: "JSON inválido" }, { status: 400 });
   }
   const { sessionId, cliId = "", goal = "reach", answers } = body;
   const s = sessionId ? getSession(sessionId) : undefined;
-  if (!s) return Response.json({ error: "apply session not found (it may have expired)" }, { status: 404 });
+  if (!s) return Response.json({ error: "Sessão de candidatura não encontrada; ela pode ter expirado." }, { status: 404 });
 
   const encoder = new TextEncoder();
   const stream = new ReadableStream<Uint8Array>({
@@ -63,7 +63,7 @@ export async function POST(req: Request) {
         const why = await classifyEmpty(page, s.url).catch(() => ({ message: "Couldn't reach a fillable form on this page." }));
         emit({ t: "error", reason: result.reason, message: result.reason === "stuck" ? result.steps.at(-1)?.detail || why.message : why.message });
       } catch (e) {
-        emit({ t: "error", message: e instanceof Error ? e.message.slice(0, 160) : "drive failed" });
+        emit({ t: "error", message: e instanceof Error ? e.message.slice(0, 160) : "Falha na navegação assistida." });
       } finally {
         controller.close();
       }

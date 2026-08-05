@@ -52,7 +52,7 @@ function KeywordField({
         <span key={v} className={cn("co-fb__chip", tone === "inc" ? "inc" : "border-border bg-surface-hover text-muted")}>
           {tone === "exc" && <Ban className="size-3 opacity-70" />}
           {v}
-          <button type="button" aria-label={`Remove ${v}`} onClick={() => onChange(values.filter((x) => x !== v))}>
+          <button type="button" aria-label={`Remover ${v}`} onClick={() => onChange(values.filter((x) => x !== v))}>
             <X className="size-3" />
           </button>
         </span>
@@ -120,23 +120,23 @@ export function FilterBuilder({
       <style>{STYLE}</style>
 
       <div>
-        <Label hint={filters.positive.length === 0 ? "empty = every fresh posting" : undefined}>Roles to find</Label>
-        <KeywordField values={filters.positive} tone="inc" placeholder="AI platform, ML infrastructure, staff engineer…" onChange={(v) => set({ positive: v })} />
+        <Label hint={filters.positive.length === 0 ? "vazio = todas as vagas recentes" : undefined}>Cargos para buscar</Label>
+        <KeywordField values={filters.positive} tone="inc" placeholder="plataforma de IA, infraestrutura de ML, engenharia sênior…" onChange={(v) => set({ positive: v })} />
         {seededFrom.length > 0 && filters.positive.length > 0 && (
-          <p className="mt-1 text-[11px] text-faint">Seeded from your {seededFrom.join(" + ")} — edit freely.</p>
+          <p className="mt-1 text-[11px] text-faint">Criado a partir de {seededFrom.join(" + ")} — edite como quiser.</p>
         )}
       </div>
 
       <div>
-        <Label>Exclude</Label>
-        <KeywordField values={filters.negative} tone="exc" placeholder="manager, sales, contract…" onChange={(v) => set({ negative: v })} />
+        <Label>Excluir</Label>
+        <KeywordField values={filters.negative} tone="exc" placeholder="gerência, vendas, contrato temporário…" onChange={(v) => set({ negative: v })} />
       </div>
 
       <div className="flex flex-wrap items-end gap-x-8 gap-y-4">
         <div>
-          <Label hint="postings published in this window">
+          <Label hint="vagas publicadas neste período">
             <span className="inline-flex items-center gap-1.5">
-              <Clock className="size-3.5 text-muted" /> Posted within
+              <Clock className="size-3.5 text-muted" /> Publicadas nos últimos
             </span>
           </Label>
           <div className="inline-flex rounded-lg border border-border bg-surface/40 p-0.5">
@@ -157,7 +157,7 @@ export function FilterBuilder({
         </div>
 
         <div>
-          <Label hint={filters.ats.length === 0 ? "pick at least one" : undefined}>Sources</Label>
+          <Label hint={filters.ats.length === 0 ? "escolha pelo menos uma" : undefined}>Fontes</Label>
           <div className="flex flex-wrap gap-1.5">
             {ATS_SOURCES.map((a) => {
               const on = filters.ats.includes(a);
@@ -185,31 +185,31 @@ export function FilterBuilder({
         className="inline-flex items-center gap-1.5 text-[12px] text-muted hover:text-foreground transition-colors max-sm:min-h-[44px]"
       >
         <SlidersHorizontal className="size-3.5" />
-        Location &amp; scope
+        Localização e escopo
         <ChevronDown className={cn("size-3.5 transition-transform", advanced && "rotate-180")} />
       </button>
 
       {advanced && (
         <div className="space-y-3 rounded-xl border border-border bg-surface/30 p-3">
           <div className="flex items-center gap-1.5 text-[12px] text-muted">
-            <MapPin className="size-3.5" /> Location
+            <MapPin className="size-3.5" /> Localização
           </div>
           <div className="grid gap-3 sm:grid-cols-3">
             <div>
-              <Label hint="rescues multi-loc posts">Always include</Label>
-              <KeywordField values={filters.alwaysAllow} tone="inc" placeholder="London…" onChange={(v) => set({ alwaysAllow: v })} />
+              <Label hint="inclui vagas com vários locais">Sempre incluir</Label>
+              <KeywordField values={filters.alwaysAllow} tone="inc" placeholder="São Paulo…" onChange={(v) => set({ alwaysAllow: v })} />
             </div>
             <div>
-              <Label>Only in</Label>
-              <KeywordField values={filters.allow} tone="inc" placeholder="Remote, EMEA…" onChange={(v) => set({ allow: v })} />
+              <Label>Somente em</Label>
+              <KeywordField values={filters.allow} tone="inc" placeholder="Remoto, Brasil…" onChange={(v) => set({ allow: v })} />
             </div>
             <div>
-              <Label>Never in</Label>
-              <KeywordField values={filters.block} tone="exc" placeholder="India…" onChange={(v) => set({ block: v })} />
+              <Label>Nunca em</Label>
+              <KeywordField values={filters.block} tone="exc" placeholder="Índia…" onChange={(v) => set({ block: v })} />
             </div>
           </div>
           <div>
-            <Label hint={`${filters.limitPerAts} companies / source`}>Scan depth</Label>
+            <Label hint={`${filters.limitPerAts} empresas por fonte`}>Profundidade da busca</Label>
             <input
               type="range"
               min={50}

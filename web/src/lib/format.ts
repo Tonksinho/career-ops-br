@@ -56,6 +56,22 @@ export function canonStatus(s: string): string {
   return STATUS_ALIAS[k] ?? s.toUpperCase();
 }
 
+const STATUS_LABEL_PT_BR: Record<string, string> = {
+  EVALUATED: "Avaliada",
+  APPLIED: "Candidatura enviada",
+  RESPONDED: "Com resposta",
+  INTERVIEW: "Entrevista",
+  OFFER: "Proposta",
+  HIRED: "Contratado(a)",
+  REJECTED: "Rejeitada",
+  DISCARDED: "Descartada",
+  SKIP: "Não candidatar",
+};
+
+export function statusLabel(status: string): string {
+  return STATUS_LABEL_PT_BR[canonStatus(status)] ?? status;
+}
+
 /** Status dot colour, mirroring the Go TUI: green hired/interview/offer, sky
  *  applied/responded, red skip/rejected, gray discarded, neutral evaluated. */
 export function statusDot(status: string): string {
@@ -110,13 +126,18 @@ export type ReportMeta = {
 
 const FIELD_KEYS: Record<string, string> = {
   date: "Date",
+  data: "Date",
   fecha: "Date",
   url: "URL",
   archetype: "Archetype",
   arquetipo: "Archetype",
+  arquétipo: "Archetype",
   score: "Score",
+  pontuação: "Score",
+  nota: "Score",
   legitimacy: "Legitimacy",
   legitimidad: "Legitimacy",
+  legitimidade: "Legitimacy",
   pdf: "PDF",
 };
 

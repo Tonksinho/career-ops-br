@@ -41,27 +41,27 @@ export async function POST(req: Request) {
   try {
     body = (await req.json()) as typeof body;
   } catch {
-    return Response.json({ error: "bad json" }, { status: 400 });
+    return Response.json({ error: "JSON inválido" }, { status: 400 });
   }
 
   const appNum = Number.parseInt(String(body.appNum ?? body.num ?? ""), 10);
   if (!Number.isInteger(appNum) || appNum < 0) {
-    return Response.json({ error: "appNum (application #) required" }, { status: 400 });
+    return Response.json({ error: "O número da candidatura é obrigatório." }, { status: 400 });
   }
   const company = cell(body.company, 80);
-  if (!company) return Response.json({ error: "company required" }, { status: 400 });
+  if (!company) return Response.json({ error: "A empresa é obrigatória." }, { status: 400 });
 
   // Default to the LOCAL day (local-first app — server clock is the user's
   // clock); validate as a REAL calendar date, not just the shape: one
   // impossible date (2026-13-45) in the log would crash the cadence engine.
   const date = (body.date ?? localISODate()).trim();
   if (!isRealISODate(date)) {
-    return Response.json({ error: "date must be a real calendar date (YYYY-MM-DD)" }, { status: 400 });
+    return Response.json({ error: "A data deve ser válida no formato AAAA-MM-DD." }, { status: 400 });
   }
   const rawChannel = (body.channel ?? "Other").trim();
   const channel = CHANNELS.find((c) => c.toLowerCase() === rawChannel.toLowerCase());
   if (!channel) {
-    return Response.json({ error: `channel must be one of: ${CHANNELS.join(", ")}` }, { status: 400 });
+    return Response.json({ error: `O canal deve ser um destes: ${CHANNELS.join(", ")}` }, { status: 400 });
   }
   const role = cell(body.role, 80);
   const contact = cell(body.contact, 120);
@@ -100,7 +100,7 @@ export async function POST(req: Request) {
       return Response.json({ ok: true, num, appNum, date, channel });
     });
   } catch (e) {
-    return Response.json({ error: e instanceof Error ? e.message : "write failed" }, { status: 500 });
+    return Response.json({ error: e instanceof Error ? e.message : "Falha ao salvar." }, { status: 500 });
   }
 }
 
@@ -113,10 +113,10 @@ export async function DELETE(req: Request) {
   try {
     body = (await req.json()) as { num?: string | number };
   } catch {
-    return Response.json({ error: "bad json" }, { status: 400 });
+    return Response.json({ error: "JSON inválido" }, { status: 400 });
   }
   const num = Number.parseInt(String(body.num ?? ""), 10);
-  if (!Number.isInteger(num) || num <= 0) return Response.json({ error: "num required" }, { status: 400 });
+  if (!Number.isInteger(num) || num <= 0) return Response.json({ error: "O número é obrigatório." }, { status: 400 });
 
   const file = followupsLogPath();
   if (!fs.existsSync(file)) return Response.json({ error: "no follow-up log" }, { status: 404 });
@@ -128,12 +128,12 @@ export async function DELETE(req: Request) {
         const first = line.split("|")[1]?.trim() ?? "";
         return Number.parseInt(first, 10) === num && /^\d+$/.test(first);
       });
-      if (idx === -1) return Response.json({ error: `follow-up #${num} not found` }, { status: 404 });
+      if (idx === -1) return Response.json({ error: `Contato #${num} não encontrado.` }, { status: 404 });
       lines.splice(idx, 1);
       atomicWrite(file, lines.join("\n"));
       return Response.json({ ok: true, num });
     });
   } catch (e) {
-    return Response.json({ error: e instanceof Error ? e.message : "delete failed" }, { status: 500 });
+    return Response.json({ error: e instanceof Error ? e.message : "Falha ao excluir." }, { status: 500 });
   }
 }

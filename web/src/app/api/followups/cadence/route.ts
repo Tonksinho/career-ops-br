@@ -44,7 +44,7 @@ export async function POST(req: Request) {
   try {
     body = (await req.json()) as Record<string, unknown>;
   } catch {
-    return Response.json({ error: "bad json" }, { status: 400 });
+    return Response.json({ error: "JSON inválido" }, { status: 400 });
   }
 
   const cadence: Record<string, number> = {};
@@ -52,7 +52,7 @@ export async function POST(req: Request) {
     if (body[key] == null) continue;
     const n = Number.parseInt(String(body[key]), 10);
     if (!Number.isInteger(n) || n < 0) {
-      return Response.json({ error: `${key} must be a non-negative integer` }, { status: 400 });
+      return Response.json({ error: `${key} deve ser um número inteiro não negativo` }, { status: 400 });
     }
     cadence[key] = n;
   }
@@ -76,7 +76,7 @@ export async function POST(req: Request) {
     try {
       parsed = yaml.load(fs.readFileSync(file, "utf8"));
     } catch {
-      return Response.json({ error: "config/profile.yml exists but could not be read as YAML — refusing to overwrite it." }, { status: 409 });
+      return Response.json({ error: "config/profile.yml existe, mas não pôde ser lido como YAML; ele não será sobrescrito." }, { status: 409 });
     }
     base = isObj(parsed) ? parsed : {};
   }
@@ -88,7 +88,7 @@ export async function POST(req: Request) {
   try {
     atomicWriteWithBackup(file, yaml.dump(merged, { lineWidth: 100, noRefs: true }));
   } catch (e) {
-    return Response.json({ error: e instanceof Error ? e.message : "write failed" }, { status: 500 });
+    return Response.json({ error: e instanceof Error ? e.message : "Falha ao salvar." }, { status: 500 });
   }
   return Response.json({ ok: true, followup_cadence: merged.followup_cadence });
 }

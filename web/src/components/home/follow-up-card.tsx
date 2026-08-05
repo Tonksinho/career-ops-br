@@ -27,7 +27,7 @@ export function FollowUpCard({ followup, onLogged }: { followup: FollowUp; onLog
           company: followup.company,
           role: followup.role,
           channel: "Other",
-          notes: "Followed up",
+          notes: "Acompanhamento realizado",
         }),
       });
       // A 4xx/5xx means nothing was written — showing "done" would silently
@@ -57,7 +57,7 @@ export function FollowUpCard({ followup, onLogged }: { followup: FollowUp; onLog
             {followup.role && <span className="text-muted"> · {followup.role}</span>}
           </p>
           <p className="flex items-center gap-1 text-[11px] text-faint">
-            <Clock className="size-3" /> {followup.appliedDate ? `applied ${followup.appliedDate}` : "follow-up due"}
+            <Clock className="size-3" /> {followup.appliedDate ? `candidatura em ${followup.appliedDate}` : "acompanhamento pendente"}
           </p>
         </div>
       </div>
@@ -73,16 +73,16 @@ export function FollowUpCard({ followup, onLogged }: { followup: FollowUp; onLog
           )}
         >
           {state === "logging" ? <Loader2 className="size-3.5 animate-spin" /> : <Check className="size-3.5" />}{" "}
-          <span className="hidden max-w-48 truncate sm:inline">{state === "error" ? `${errorMsg ?? "Failed"} — retry` : "Mark followed up"}</span>
-          <span className="sm:hidden">{state === "error" ? "Retry" : "Followed up"}</span>
+          <span className="hidden max-w-48 truncate sm:inline">{state === "error" ? `${errorMsg ?? "Falha"} — tentar novamente` : "Marcar como contatada"}</span>
+          <span className="sm:hidden">{state === "error" ? "Tentar novamente" : "Contato feito"}</span>
         </button>
         {followup.num != null && (
-          <a href={`/pipeline/${followup.num}`} title="Open report" className="inline-flex shrink-0 items-center justify-center rounded p-1 text-faint transition hover:text-brand max-sm:min-h-[44px] max-sm:min-w-[44px]">
+          <a href={`/pipeline/${followup.num}`} title="Abrir relatório" className="inline-flex shrink-0 items-center justify-center rounded p-1 text-faint transition hover:text-brand max-sm:min-h-[44px] max-sm:min-w-[44px]">
             <FileText className="size-4" />
           </a>
         )}
         <button type="button" onClick={() => setState("snoozed")} className="inline-flex shrink-0 items-center justify-center text-[11px] text-faint transition hover:text-foreground max-sm:min-h-[44px] max-sm:min-w-[44px]">
-          Snooze
+          Adiar
         </button>
       </div>
     </div>

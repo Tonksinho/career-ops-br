@@ -262,7 +262,7 @@ export function ExploreProvider({ children }: { children: React.ReactNode }) {
     if (acc.length > 0) {
       setMatchCount(acc.length);
       setPhase("revealing");
-      setStatus(`${acc.length} fresh role${acc.length === 1 ? "" : "s"} found — free.`);
+      setStatus(`${acc.length} vaga${acc.length === 1 ? " recente encontrada" : "s recentes encontradas"} — grátis.`);
       window.setTimeout(() => setPhase("results"), 850);
     } else if (sawError) {
       setError(sawError);
@@ -407,7 +407,7 @@ export function ExploreProvider({ children }: { children: React.ReactNode }) {
       }
       if (r.status === 400) {
         const d = await r.json().catch(() => ({}));
-        sawError = d.error || "AI search isn't available.";
+        sawError = d.error || "A busca com IA não está disponível.";
       } else if (!r.body) {
         sawError = "No response stream.";
       } else {
@@ -428,7 +428,7 @@ export function ExploreProvider({ children }: { children: React.ReactNode }) {
     if (acc.length > 0) {
       setMatchCount(acc.length);
       setPhase("revealing");
-      setStatus(`${acc.length} candidate${acc.length === 1 ? "" : "s"} found.`);
+      setStatus(`${acc.length} oportunidade${acc.length === 1 ? " encontrada" : "s encontradas"}.`);
       window.setTimeout(() => setPhase("results"), 850);
     } else if (sawError) {
       setError(sawError);

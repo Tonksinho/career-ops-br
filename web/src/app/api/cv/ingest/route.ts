@@ -68,7 +68,7 @@ export async function POST(req: Request) {
       const body = (await req.json()) as { text?: string; cliId?: string };
       cliId = body.cliId || "";
       const text = (body.text || "").trim();
-      if (!text) return Response.json({ error: "empty cv text" }, { status: 400 });
+      if (!text) return Response.json({ error: "O texto do currículo está vazio." }, { status: 400 });
       promptSource = TEXT_SRC(text);
     } else if (ctype.includes("multipart/form-data")) {
       const form = await req.formData();
@@ -78,7 +78,7 @@ export async function POST(req: Request) {
       // Reading a PDF/DOCX from a path needs the CLI's file tool, which only Claude
       // is granted here. Tell non-Claude users plainly instead of failing opaquely.
       if (cliId !== "claude" && /\.(pdf|docx)$/i.test(file.name)) {
-        return Response.json({ error: "PDF upload needs Claude Code — paste your CV text instead." }, { status: 400 });
+        return Response.json({ error: "O envio de PDF precisa do Claude Code — como alternativa, cole o texto do currículo." }, { status: 400 });
       }
       const ext = (file.name.match(/\.[a-z0-9]+$/i)?.[0] || ".pdf").toLowerCase();
       const dir = fs.mkdtempSync(path.join(os.tmpdir(), "career-ops-cv-"));
@@ -95,7 +95,7 @@ export async function POST(req: Request) {
   const resolved = resolveCli(cliId);
   if (!resolved) {
     if (tempFile) cleanupTemp(tempFile);
-    return Response.json({ error: `CLI '${cliId}' not found on this machine` }, { status: 404 });
+    return Response.json({ error: `CLI “${cliId}” não encontrada nesta máquina` }, { status: 404 });
   }
   const { spec, binPath } = resolved;
   const prompt = ingestPrompt(promptSource);
@@ -122,7 +122,7 @@ export async function POST(req: Request) {
     child = spawn(binPath, args, { cwd: careerOpsRoot(), env: process.env });
   } catch (e) {
     if (tempFile) cleanupTemp(tempFile); // never leak the CV temp if spawn throws sync
-    return Response.json({ error: e instanceof Error ? e.message : "failed to start the CLI" }, { status: 500 });
+    return Response.json({ error: e instanceof Error ? e.message : "Não foi possível iniciar a CLI." }, { status: 500 });
   }
 
   const encoder = new TextEncoder();

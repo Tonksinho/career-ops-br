@@ -117,7 +117,7 @@ export async function driveSession(
   const resolved = resolveCli(cliId);
   const steps: DriveStep[] = [];
   if (!resolved || cliId !== "claude") {
-    return { reached: false, turns: 0, reason: "Agentic drive currently needs Claude Code (browser-driving CLI).", steps };
+    return { reached: false, turns: 0, reason: "A navegação assistida precisa do Claude Code no momento (CLI com controle do navegador).", steps };
   }
   const shot = async () => {
     try {
@@ -214,7 +214,7 @@ Reply ONE action JSON.`;
         detail = `unknown action ${act.action}`;
       }
     } catch (e) {
-      detail = `${act.action} failed: ${e instanceof Error ? e.message.slice(0, 50) : "err"}`;
+      detail = `${act.action} falhou: ${e instanceof Error ? e.message.slice(0, 50) : "erro"}`;
     }
     await page.waitForTimeout(700);
     const s: DriveStep = { turn, action: act.action, detail, thumb: await shot(), note: note || undefined };

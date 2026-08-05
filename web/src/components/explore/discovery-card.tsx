@@ -11,7 +11,7 @@ import { useExplore } from "./explore-provider";
 function freshness(postedAt: string): string {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(postedAt)) return "";
   const days = Math.max(0, Math.round((Date.now() - new Date(postedAt + "T00:00:00Z").getTime()) / 86_400_000));
-  return days === 0 ? "today" : days === 1 ? "1d ago" : `${days}d ago`;
+  return days === 0 ? "hoje" : days === 1 ? "há 1 dia" : `há ${days} dias`;
 }
 
 // Real company logo (favicon) via the localhost proxy, cached on disk FOREVER per
@@ -36,7 +36,7 @@ function Logo({ company }: { company: string }) {
 }
 
 // What a running worker is doing on this exact posting → the live CTA label.
-const WORKER_LABEL: Record<string, string> = { evaluate: "Evaluating…", pdf: "Preparing CV…", research: "Researching…", apply: "Filling…" };
+const WORKER_LABEL: Record<string, string> = { evaluate: "Avaliando…", pdf: "Preparando currículo…", research: "Pesquisando…", apply: "Preenchendo…" };
 
 export function DiscoveryCard({ offer, inPipeline, evaluatedN }: { offer: DiscoveredOffer; inPipeline: boolean; evaluatedN?: string }) {
   const { added, adding, addToPipeline } = useExplore();
@@ -50,7 +50,7 @@ export function DiscoveryCard({ offer, inPipeline, evaluatedN }: { offer: Discov
   );
   const working = job?.status === "running";
   const doneEval = job?.status === "done" && job.kind === "evaluate";
-  const statusLabel = WORKER_LABEL[job?.kind ?? ""] ?? "Working…";
+  const statusLabel = WORKER_LABEL[job?.kind ?? ""] ?? "Processando…";
 
   const isAdded = added.has(offer.url) || inPipeline || working || doneEval;
   const isAdding = adding.has(offer.url);
@@ -77,8 +77,8 @@ export function DiscoveryCard({ offer, inPipeline, evaluatedN }: { offer: Discov
           href={offer.url}
           target="_blank"
           rel="noopener noreferrer"
-          title="Open the posting"
-          aria-label="Open the posting"
+          title="Abrir anúncio da vaga"
+          aria-label="Abrir anúncio da vaga"
           className="-m-1 inline-flex shrink-0 items-center justify-center rounded p-1 text-faint transition-colors hover:text-foreground max-sm:min-h-[44px] max-sm:min-w-[44px]"
         >
           <ExternalLink className="size-4" />
@@ -91,14 +91,14 @@ export function DiscoveryCard({ offer, inPipeline, evaluatedN }: { offer: Discov
         {unverified && (
           <span
             className="inline-flex items-center gap-1 rounded border border-amber-500/25 bg-amber-500/10 px-1.5 py-0.5 font-medium text-amber-600 dark:text-amber-300"
-            title="Found by AI on the public web — we can't confirm it's still live without opening it. Evaluating runs a real browser check and sets the verdict."
+            title="Encontrada pela IA na web pública. A avaliação verifica se a vaga continua aberta e apresenta o parecer."
           >
-            <ShieldQuestion className="size-3" /> unverified
+            <ShieldQuestion className="size-3" /> não verificada
           </span>
         )}
         {offer.matchedKeyword && (
-          <span className="text-faint" title="Keyword match — not yet scored. Evaluate to get an A–F fit score.">
-            · matched <span className="text-brand/80">{offer.matchedKeyword}</span>
+          <span className="text-faint" title="Correspondência por palavra-chave — ainda sem pontuação. Avalie para obter a nota de compatibilidade.">
+            · corresponde a <span className="text-brand/80">{offer.matchedKeyword}</span>
           </span>
         )}
       </div>
@@ -116,13 +116,13 @@ export function DiscoveryCard({ offer, inPipeline, evaluatedN }: { offer: Discov
             href={evaluatedN ? `/pipeline/${evaluatedN}` : job ? `/jobs/${job.id}` : "/pipeline"}
             className="inline-flex w-full items-center justify-center gap-1.5 rounded-md bg-brand-soft px-2.5 py-2 text-xs font-medium text-brand max-sm:min-h-[44px]"
           >
-            <Check className="size-3.5" /> Evaluated · view report
+            <Check className="size-3.5" /> Avaliada · ver relatório
           </a>
         ) : working ? (
           <div className="inline-flex w-full items-center justify-center gap-1.5 rounded-md border border-brand/30 bg-brand-soft/60 px-2.5 py-2 text-xs font-medium text-brand">
             <Loader2 className="size-3.5 animate-spin" />
             {statusLabel}
-            <span className="text-brand/60">· in pipeline</span>
+            <span className="text-brand/60">· no pipeline</span>
           </div>
         ) : (
           <div className="flex items-center gap-2">
@@ -136,15 +136,15 @@ export function DiscoveryCard({ offer, inPipeline, evaluatedN }: { offer: Discov
               )}
             >
               {isAdding ? <Loader2 className="size-3.5 animate-spin" /> : isAdded ? <Check className="size-3.5" /> : <Plus className="size-3.5" />}
-              {isAdded ? "In pipeline" : "Add to pipeline"}
+              {isAdded ? "No pipeline" : "Adicionar ao pipeline"}
             </button>
             <button
               type="button"
               onClick={evaluate}
-              title={unverified ? "Runs a real evaluation — and verifies the posting is live. Uses tokens." : "Runs a real A–F evaluation. Uses tokens."}
+              title={unverified ? "Executa uma avaliação e verifica se a vaga está aberta. Consome tokens." : "Executa uma avaliação real de compatibilidade. Consome tokens."}
               className="inline-flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-md border border-brand/30 px-2.5 py-2 text-xs font-medium text-brand transition-colors hover:bg-brand-soft max-sm:min-h-[44px]"
             >
-              Evaluate <Coins className="size-3.5 opacity-80" />
+              Avaliar <Coins className="size-3.5 opacity-80" />
             </button>
           </div>
         )}

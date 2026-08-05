@@ -5,14 +5,14 @@ import { canonStatus, scoreNum } from "@/lib/format";
 export const dynamic = "force-dynamic";
 
 const STAGES: { key: string; label: string }[] = [
-  { key: "EVALUATED", label: "Evaluated" },
-  { key: "APPLIED", label: "Applied" },
-  { key: "RESPONDED", label: "Responded" },
-  { key: "INTERVIEW", label: "Interview" },
-  { key: "OFFER", label: "Offer" },
-  { key: "HIRED", label: "Hired" },
-  { key: "REJECTED", label: "Rejected" },
-  { key: "DISCARDED", label: "Discarded" },
+  { key: "EVALUATED", label: "Avaliadas" },
+  { key: "APPLIED", label: "Candidaturas enviadas" },
+  { key: "RESPONDED", label: "Com resposta" },
+  { key: "INTERVIEW", label: "Entrevistas" },
+  { key: "OFFER", label: "Propostas" },
+  { key: "HIRED", label: "Contratações" },
+  { key: "REJECTED", label: "Rejeitadas" },
+  { key: "DISCARDED", label: "Descartadas" },
 ];
 
 export default function Analytics() {
@@ -45,26 +45,26 @@ export default function Analytics() {
 
   return (
     <div className="mx-auto max-w-4xl px-6 py-10">
-      <h1 className="font-display text-2xl tracking-tight text-landing">Analytics</h1>
-      <p className="mt-1 text-sm text-muted">Across {total} tracked evaluations.</p>
+      <h1 className="font-display text-2xl tracking-tight text-landing">Análises</h1>
+      <p className="mt-1 text-sm text-muted">Visão geral de {total} avaliações acompanhadas.</p>
 
       {/* headline stats */}
       <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
-        <Stat value={total} label="evaluated" />
-        <Stat value={avg ? avg.toFixed(2) : "—"} label="avg score" />
+        <Stat value={total} label="avaliadas" />
+        <Stat value={avg ? avg.toFixed(2) : "—"} label="pontuação média" />
         <Stat
           value={interviews}
-          label="interviews"
-          hint={interviews === 0 ? "Interviews follow replies — keep follow-ups warm →" : undefined}
+          label="entrevistas"
+          hint={interviews === 0 ? "Entrevistas vêm após respostas — mantenha os contatos ativos →" : undefined}
         />
         <Stat
           value={offers}
-          label="offers"
-          hint={offers === 0 ? "Offers follow interviews — keep the conversations going →" : undefined}
+          label="propostas"
+          hint={offers === 0 ? "Propostas vêm após entrevistas — continue as conversas →" : undefined}
         />
       </div>
 
-      <Section title="Pipeline by stage">
+      <Section title="Pipeline por etapa">
         {stageCounts.map((s) => (
           <Bar
             key={s.key}
@@ -77,13 +77,13 @@ export default function Analytics() {
         ))}
       </Section>
 
-      <Section title="Score distribution">
+      <Section title="Distribuição das pontuações">
         {buckets.map((b) => (
           <Bar key={b.label} label={b.label} value={b.n} pct={(b.n / maxBucket) * 100} total={scores.length} />
         ))}
       </Section>
 
-      <Section title="Top companies" id="companies">
+      <Section title="Principais empresas" id="companies">
         {topCompanies.map(([name, n]) => (
           <Bar key={name} label={name} value={n} pct={(n / maxCompany) * 100} />
         ))}

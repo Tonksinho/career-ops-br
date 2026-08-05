@@ -40,7 +40,7 @@ export function ExplorerView({
   const { filters, setFilters, initFilters, phase, running, offers, discover, status, error, mode, setMode, aiIntent, setAiIntent, discoverAI, companiesScanned, companiesAvailable, capHit, droppedNoDate, partial } = useExplore();
   const scanNote =
     companiesScanned > 0
-      ? `Scanned ${companiesScanned.toLocaleString()}${companiesAvailable > companiesScanned ? ` of ${companiesAvailable.toLocaleString()}` : ""} compan${companiesScanned === 1 ? "y" : "ies"}${partial ? " · some sources were unreachable" : ""}.`
+      ? `${companiesScanned.toLocaleString()} empresa${companiesScanned === 1 ? " analisada" : "s analisadas"}${companiesAvailable > companiesScanned ? ` de ${companiesAvailable.toLocaleString()}` : ""}${partial ? " · algumas fontes estavam indisponíveis" : ""}.`
       : undefined;
   const inited = useRef(false);
   const [refineOpen, setRefineOpen] = useState(false);
@@ -106,8 +106,8 @@ export function ExplorerView({
         <div className="flex flex-wrap items-center gap-3">
           <div className="flex items-center gap-2.5">
             <Compass className="size-6 text-brand" />
-            <h1 className={`${instrumentSerif.className} text-3xl text-foreground`}>Explore</h1>
-            <span className="rounded-full border border-brand/30 bg-brand-soft px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-brand-text">New</span>
+            <h1 className={`${instrumentSerif.className} text-3xl text-foreground`}>Explorar</h1>
+            <span className="rounded-full border border-brand/30 bg-brand-soft px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-brand-text">Novo</span>
           </div>
           <div className="w-full sm:ml-auto sm:w-auto">
             <ExploreModeToggle mode={mode} onChange={setMode} cliConfigured={!!cli.id} />
@@ -116,15 +116,15 @@ export function ExplorerView({
         {!isResults && (
           <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-muted">
             {isAi
-              ? "Describe the role in plain language — an AI hunts the open web for it, on your own AI. Candidates are unverified until you evaluate."
-              : "Scan the public ATS network — Greenhouse, Lever, Ashby, Workday. Fresh postings matched to you, zero tokens. You only spend when you choose to evaluate one."}
+              ? "Descreva a vaga com suas palavras — sua própria IA pesquisa a web aberta. As oportunidades só serão verificadas quando você avaliá-las."
+              : "Busque na rede pública de ATS — Greenhouse, Lever, Ashby e Workday. Vagas recentes compatíveis com você, sem gastar tokens. Você só usa tokens quando decide avaliar uma delas."}
           </p>
         )}
       </header>
 
       {!rootExists && (
         <div className="mb-5 rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-700 dark:text-amber-300">
-          Your career-ops home isn’t set up yet — discovery needs a checkout with a profile to seed from.
+          Sua central career-ops ainda não está configurada — a busca precisa de uma instalação com perfil para usar como ponto de partida.
         </div>
       )}
 
@@ -145,10 +145,10 @@ export function ExplorerView({
             {phase === "empty-loose" && (
               <EmptyState
                 tone="loose"
-                title="No public matches — yet."
-                body="AI search reads what's public. Try broader intent, or run the free Scan over the ATS network."
+                title="Nenhuma oportunidade pública encontrada — por enquanto."
+                body="A busca com IA lê o que está público. Amplie os critérios ou execute a busca gratuita na rede de ATS."
                 onRerun={() => setMode("scan")}
-                rerunLabel="Run the free Scan"
+                rerunLabel="Executar busca gratuita"
               />
             )}
             {phase === "failed" && <FailedCard msg={error || status} onRetry={() => void discoverAI()} />}
@@ -159,13 +159,13 @@ export function ExplorerView({
           {isResults ? (
             <div className="mb-6 rounded-xl border border-border bg-surface/30">
               <button type="button" onClick={() => setRefineOpen((v) => !v)} className="flex w-full items-center gap-2 px-4 py-3 text-sm font-medium text-foreground">
-                <Compass className="size-4 text-brand" /> Refine search
+                <Compass className="size-4 text-brand" /> Refinar busca
                 <ChevronDown className={cn("ml-auto size-4 text-muted transition-transform", refineOpen && "rotate-180")} />
               </button>
               {refineOpen && (
                 <div className="space-y-4 border-t border-border p-4">
                   <FilterBuilder filters={filters} onChange={setFilters} seededFrom={seed.seededFrom} />
-                  <DiscoverBar canDiscover={canDiscover} onDiscover={discover} label="Re-cast (free)" />
+                  <DiscoverBar canDiscover={canDiscover} onDiscover={discover} label="Buscar novamente (grátis)" />
                 </div>
               )}
             </div>
@@ -173,7 +173,7 @@ export function ExplorerView({
             <div className="mb-6 rounded-2xl border border-border bg-surface/30 p-5">
               <FilterBuilder filters={filters} onChange={setFilters} seededFrom={seed.seededFrom} />
               <div className="mt-5">
-                <DiscoverBar canDiscover={canDiscover} onDiscover={discover} label="Discover (free)" />
+                <DiscoverBar canDiscover={canDiscover} onDiscover={discover} label="Buscar vagas (grátis)" />
               </div>
             </div>
           )}
@@ -182,7 +182,7 @@ export function ExplorerView({
             <div className="mb-4 flex items-start gap-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3">
               <Sparkles className="mt-0.5 size-4 shrink-0 text-emerald-500" />
               <p className="text-[13px] leading-relaxed text-foreground">
-                These are live roles that match your CV. <span className="text-emerald-600 dark:text-emerald-400">Nothing here cost you a token.</span> Pick the one you&apos;re most curious about — Evaluate it and I&apos;ll tell you exactly how you score, and why.
+                Estas são vagas abertas compatíveis com seu currículo. <span className="text-emerald-600 dark:text-emerald-400">Nada aqui consumiu tokens.</span> Escolha a que mais chamou sua atenção, avalie e veja sua pontuação e os motivos.
               </p>
             </div>
           )}
@@ -195,27 +195,27 @@ export function ExplorerView({
           {phase === "empty-current" && (
             <EmptyState
               tone="good"
-              title="You're all caught up."
-              body="Nothing new since your last scan. Your pipeline is current — that's the goal."
+              title="Tudo em dia."
+              body="Nenhuma novidade desde a última busca. Seu pipeline está atualizado — esse é o objetivo."
               note={scanNote}
               onRerun={() => {
                 setFilters({ ...filters, sinceDays: Math.max(filters.sinceDays, 30) });
                 void discover();
               }}
-              rerunLabel="Look back 30 days"
+              rerunLabel="Buscar nos últimos 30 dias"
             />
           )}
           {phase === "empty-loose" && (
             <EmptyState
               tone="loose"
-              title="No fresh matches — yet."
-              body="Discovery is free — loosen and re-cast as often as you want."
+              title="Nenhuma vaga recente compatível — por enquanto."
+              body="A busca é gratuita — amplie os critérios e tente quantas vezes quiser."
               note={scanNote}
               onRerun={() => {
                 setFilters({ ...filters, sinceDays: 30, block: [], allow: [] });
                 void discover();
               }}
-              rerunLabel="Widen to 30 days · clear location"
+              rerunLabel="Ampliar para 30 dias · limpar localização"
             />
           )}
           {phase === "degraded" && (
@@ -248,7 +248,7 @@ function DiscoverBar({ canDiscover, onDiscover, label }: { canDiscover: boolean;
       </button>
       <span className="inline-flex items-center gap-1.5 text-[12px] text-muted">
         <span className="size-1.5 rounded-full bg-emerald-500" />
-        Evaluating a role later costs tokens. Discovering never does.
+        Avaliar uma vaga depois consome tokens. Buscar vagas é sempre grátis.
       </span>
     </div>
   );
@@ -288,18 +288,18 @@ function DegradedCard({
   // 0 results, but the scan was NOT a clean full search → never "all caught up".
   // Pick the most informative reason (authoritative when the scanner's --json mode
   // is available; otherwise the 0-companies fallback).
-  let title = "The scan ran, but couldn’t reach any sources.";
+  let title = "A busca foi executada, mas nenhuma fonte respondeu.";
   let body =
-    "The public ATS directories didn’t respond — usually a transient network hiccup or rate-limit, so nothing could be searched. This isn’t “all caught up”; a retry in a moment usually clears it.";
+    "Os diretórios públicos de ATS não responderam — geralmente por instabilidade temporária ou limite de requisições. Tente novamente em alguns instantes.";
   if (companiesScanned > 0 && capHit) {
-    title = "No matches in the slice we searched.";
-    body = `The scan is capped, so it only searched ${companiesScanned.toLocaleString()}${companiesAvailable > companiesScanned ? ` of ${companiesAvailable.toLocaleString()}` : ""} companies — not the whole network. Raise scan depth (Refine search) or narrow your roles, then re-cast to look deeper.`;
+    title = "Nenhuma vaga compatível no recorte pesquisado.";
+    body = `A busca está limitada e analisou apenas ${companiesScanned.toLocaleString()}${companiesAvailable > companiesScanned ? ` de ${companiesAvailable.toLocaleString()}` : ""} empresas, não a rede inteira. Aumente a profundidade ou restrinja os cargos e tente novamente.`;
   } else if (companiesScanned > 0 && droppedNoDate > 0) {
-    title = "Fresh-looking roles were skipped for missing dates.";
-    body = `${droppedNoDate.toLocaleString()} posting${droppedNoDate === 1 ? "" : "s"} matched but had no clear publish date, so the freshness filter dropped them. Widening the time window often brings dated equivalents back.`;
+    title = "Vagas aparentemente recentes foram ignoradas por falta de data.";
+    body = `${droppedNoDate.toLocaleString()} vaga${droppedNoDate === 1 ? " era compatível, mas não tinha" : "s eram compatíveis, mas não tinham"} data de publicação clara. Ampliar o período pode trazer alternativas com data.`;
   } else if (companiesScanned > 0 && partial) {
-    title = "Some job boards were unreachable.";
-    body = `The scan searched ${companiesScanned.toLocaleString()} companies, but one or more sources didn’t respond — so this is a partial result, not “all caught up”. A retry usually clears it.`;
+    title = "Alguns portais de vagas estavam indisponíveis.";
+    body = `A busca analisou ${companiesScanned.toLocaleString()} empresas, mas uma ou mais fontes não responderam. Este resultado é parcial; tente novamente.`;
   }
   return (
     <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-5 text-center">
@@ -307,7 +307,7 @@ function DegradedCard({
       <p className="mt-2 text-sm font-medium text-foreground">{title}</p>
       <p className="mx-auto mt-1 max-w-md text-[13px] text-muted">{body}</p>
       <button onClick={onRetry} className="mt-3 inline-flex items-center gap-1.5 rounded-md bg-brand-soft px-3 py-1.5 text-sm font-medium text-brand">
-        <RotateCcw className="size-4" /> Retry the scan
+        <RotateCcw className="size-4" /> Repetir busca
       </button>
     </div>
   );
@@ -319,11 +319,11 @@ function CappedBanner({ companiesScanned, companiesAvailable, onRefine }: { comp
   return (
     <div className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-1.5 rounded-xl border border-amber-500/25 bg-amber-500/[0.07] px-4 py-2.5 text-[13px]">
       <span className="text-foreground">
-        Showing a capped slice — searched {companiesScanned.toLocaleString()}
-        {companiesAvailable > companiesScanned ? ` of ${companiesAvailable.toLocaleString()}` : ""} companies.
+        Exibindo um recorte limitado — {companiesScanned.toLocaleString()}
+        {companiesAvailable > companiesScanned ? ` de ${companiesAvailable.toLocaleString()}` : ""} empresas analisadas.
       </span>
       <button onClick={onRefine} className="font-medium text-brand hover:underline">
-        Raise scan depth to search deeper
+        Aumentar a profundidade da busca
       </button>
     </div>
   );
@@ -339,17 +339,16 @@ function FailedCard({ msg, onRetry }: { msg: string; onRetry: () => void }) {
         <div className="mx-auto grid size-12 place-items-center rounded-full bg-brand-soft text-brand">
           <Compass className="size-6" />
         </div>
-        <h2 className={`${instrumentSerif.className} mt-4 text-2xl text-foreground`}>Discovery needs the full toolkit</h2>
+        <h2 className={`${instrumentSerif.className} mt-4 text-2xl text-foreground`}>A busca precisa do kit completo</h2>
         <p className="mx-auto mt-1.5 max-w-md text-sm text-muted">
-          Your career-ops home looks data-only or is on an older version. The free scanner ships with a complete checkout —
-          update career-ops, or paste a job URL on the pipeline to evaluate it directly.
+          Sua instalação do career-ops parece conter apenas dados ou está desatualizada. Atualize o career-ops ou cole a URL de uma vaga no pipeline para avaliá-la diretamente.
         </p>
         <div className="mt-4 flex flex-wrap justify-center gap-2">
           <Link href="/pipeline" className="inline-flex items-center gap-1.5 rounded-lg bg-brand px-3.5 py-2 text-sm font-semibold text-brand-foreground transition hover:brightness-110">
-            Open pipeline
+            Abrir pipeline
           </Link>
           <Link href="/config" className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3.5 py-2 text-sm font-medium text-foreground transition hover:border-brand/40 hover:text-brand">
-            Open Config
+            Abrir configurações
           </Link>
         </div>
       </div>
@@ -358,10 +357,10 @@ function FailedCard({ msg, onRetry }: { msg: string; onRetry: () => void }) {
   return (
     <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-5 text-center">
       <AlertTriangle className="mx-auto size-6 text-amber-500" />
-      <p className="mt-2 text-sm font-medium text-foreground">Couldn’t finish the search.</p>
+      <p className="mt-2 text-sm font-medium text-foreground">Não foi possível concluir a busca.</p>
       <p className="mt-1 text-[13px] text-muted">{msg}</p>
       <button onClick={onRetry} className="mt-3 inline-flex items-center gap-1.5 rounded-md bg-brand-soft px-3 py-1.5 text-sm font-medium text-brand">
-        <RotateCcw className="size-4" /> Try again
+        <RotateCcw className="size-4" /> Tentar novamente
       </button>
     </div>
   );
@@ -373,12 +372,12 @@ function BlockedCard() {
       <div className="mx-auto grid size-12 place-items-center rounded-full bg-brand-soft text-brand">
         <Sparkles className="size-6" />
       </div>
-      <h2 className={`${instrumentSerif.className} mt-4 text-2xl text-foreground`}>AI search needs a CLI</h2>
+      <h2 className={`${instrumentSerif.className} mt-4 text-2xl text-foreground`}>A busca com IA precisa de uma CLI</h2>
       <p className="mx-auto mt-1.5 max-w-md text-sm text-muted">
-        Connect Claude Code, Gemini, or any agent CLI — your key, your tokens, your machine. The free Scan stays available without one.
+        Conecte o Claude Code, Gemini ou outra CLI de agente — usando sua chave, seus tokens e sua máquina. A busca gratuita continua disponível sem uma CLI.
       </p>
       <Link href="/config" className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-brand px-3.5 py-2 text-sm font-semibold text-brand-foreground transition hover:brightness-110">
-        <Settings className="size-4" /> Open Config
+        <Settings className="size-4" /> Abrir configurações
       </Link>
     </div>
   );

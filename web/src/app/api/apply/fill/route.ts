@@ -14,10 +14,10 @@ export async function POST(req: Request) {
   try {
     body = await req.json();
   } catch {
-    return Response.json({ error: "bad json" }, { status: 400 });
+    return Response.json({ error: "JSON inválido" }, { status: 400 });
   }
   const { sessionId, answers = {}, fields = [], handoff, company } = body;
-  if (!sessionId) return Response.json({ error: "sessionId required" }, { status: 400 });
+  if (!sessionId) return Response.json({ error: "sessionId é obrigatório." }, { status: 400 });
 
   // Resolve the tailored CV server-side (never trust a client path): by the
   // offer's company if known, else best-effort from the form title.
@@ -29,6 +29,6 @@ export async function POST(req: Request) {
     if (handoff) await handoffSession(sessionId).catch(() => {});
     return Response.json({ ...result, handedOff: !!handoff, cvAttached: !!cvPath });
   } catch (e) {
-    return Response.json({ error: e instanceof Error ? e.message.slice(0, 200) : "fill failed" }, { status: 500 });
+    return Response.json({ error: e instanceof Error ? e.message.slice(0, 200) : "Falha ao preencher." }, { status: 500 });
   }
 }

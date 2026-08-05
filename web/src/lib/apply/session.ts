@@ -41,7 +41,7 @@ async function gotoResilient(page: Page, url: string): Promise<Response | null> 
       await page.waitForTimeout(800 * (attempt + 1));
     }
   }
-  throw lastErr instanceof Error ? lastErr : new Error("could not open the page");
+  throw lastErr instanceof Error ? lastErr : new Error("não foi possível abrir a página");
 }
 
 /** Distinguish a real APPLICATION form from a careers-listing / job-search form
@@ -138,7 +138,7 @@ async function headedBrowser(): Promise<Browser> {
     try {
       nb = await chromium.launch({ headless: false, args: ["--window-position=-3200,-3200", "--window-size=1280,940"] });
     } catch {
-      throw new Error("The apply feature needs Google Chrome. Install Chrome (or run: npx playwright install chromium) and try again.");
+      throw new Error("O recurso de candidatura precisa do Google Chrome. Instale o Chrome (ou execute: npx playwright install chromium) e tente novamente.");
     }
   }
   globalThis.__coHeadedBrowser = nb;
@@ -333,7 +333,7 @@ export async function finalizeDrivenSession(id: string, cliId?: string): Promise
   s.frame = frame;
   s.fields = form.fields;
   if (form.title) s.title = form.title;
-  const issues: ApplyIssue[] = [{ level: "info", code: "ai-navigated", message: "AI navigated to reach this application form on your machine — review the fields before submitting." }];
+  const issues: ApplyIssue[] = [{ level: "info", code: "ai-navigated", message: "A IA navegou até este formulário de candidatura na sua máquina. Revise os campos antes de enviar." }];
   if (aiInterpreted) issues.push({ level: "info", code: "ai-interpreted", message: "AI also read the fields live (uncommon layout) — give them an extra check." });
   const cap = await captchaWarning(s.page);
   if (cap) issues.push(cap);
@@ -365,7 +365,7 @@ export async function fillSession(
   cvPath?: string,
 ): Promise<{ steps: FillStep[]; navigated: boolean; issues: ApplyIssue[] }> {
   const s = SESSIONS.get(id);
-  if (!s) throw new Error("apply session not found (it may have expired)");
+  if (!s) throw new Error("sessão de candidatura não encontrada; ela pode ter expirado");
   const byId = new Map(fieldsMeta.map((f) => [f.id, f]));
   const steps: FillStep[] = [];
   // Belt-and-suspenders: if filling ever navigates the page (i.e. something got
@@ -521,7 +521,7 @@ export async function fillSession(
  *  visible — we reposition it on-screen via CDP first. We never submit. */
 export async function handoffSession(id: string): Promise<void> {
   const s = SESSIONS.get(id);
-  if (!s) throw new Error("apply session not found");
+  if (!s) throw new Error("sessão de candidatura não encontrada");
   try {
     const cdp = await s.context.newCDPSession(s.page);
     const { windowId } = (await cdp.send("Browser.getWindowForTarget")) as { windowId: number };

@@ -35,8 +35,8 @@ export function ThemeToggle({ className }: { className?: string }) {
       size="icon"
       type="button"
       onClick={toggle}
-      aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
-      title={dark ? "Light mode" : "Dark mode"}
+      aria-label={dark ? "Mudar para o tema claro" : "Mudar para o tema escuro"}
+      title={dark ? "Tema claro" : "Tema escuro"}
       className={cn("text-muted", className)}
     >
       {dark ? <Sun className="size-4" /> : <Moon className="size-4" />}

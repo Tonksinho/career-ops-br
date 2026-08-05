@@ -7,7 +7,7 @@ import { Search, ChevronsUpDown, X, Compass, ArrowRight } from "lucide-react";
 import type { Application, InboxJob } from "@/lib/career-ops";
 import { Badge } from "@/components/ui/badge";
 import { CompanyLogo } from "@/components/company-logo";
-import { canonStatus, scoreNum, scoreTone, statusDot } from "@/lib/format";
+import { canonStatus, scoreNum, scoreTone, statusDot, statusLabel } from "@/lib/format";
 import { InboxTriage } from "@/components/inbox/inbox-triage";
 import { cn } from "@/lib/cn";
 
@@ -27,8 +27,23 @@ const TABS = [
 ] as const;
 type Tab = (typeof TABS)[number];
 
+const TAB_LABELS: Record<Tab, string> = {
+  INBOX: "CAIXA DE ENTRADA",
+  ALL: "TODAS",
+  EVALUATED: "AVALIADAS",
+  APPLIED: "CANDIDATURAS",
+  RESPONDED: "COM RESPOSTA",
+  INTERVIEW: "ENTREVISTAS",
+  OFFER: "PROPOSTAS",
+  HIRED: "CONTRATAÇÕES",
+  REJECTED: "REJEITADAS",
+  DISCARDED: "DESCARTADAS",
+  SKIP: "NÃO CANDIDATAR",
+};
+
 const SORT_KEYS = ["company", "role", "score", "status", "date"] as const;
 type SortKey = (typeof SORT_KEYS)[number];
+const SORT_LABELS: Record<SortKey, string> = { company: "empresa", role: "vaga", score: "nota", status: "status", date: "data" };
 
 export function PipelineView({
   applications,
@@ -122,8 +137,8 @@ export function PipelineView({
         <div>
           <h1 className="font-display text-2xl tracking-tight text-landing">Pipeline</h1>
           <p className="mt-1 text-sm text-muted">
-            <span className="tabular-nums">{pendingInbox.length}</span> in inbox ·{" "}
-            <span className="tabular-nums">{applications.length}</span> tracked
+            <span className="tabular-nums">{pendingInbox.length}</span> na caixa de entrada ·{" "}
+            <span className="tabular-nums">{applications.length}</span> acompanhadas
           </p>
         </div>
         {/* the tracker has its own search; the inbox brings its own facet filters */}
@@ -133,7 +148,7 @@ export function PipelineView({
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
-              placeholder="Search company or role…"
+              placeholder="Buscar empresa ou vaga…"
               className="w-full rounded-md border border-border bg-surface/60 py-2 pl-9 pr-3 text-sm outline-none transition-colors placeholder:text-faint focus:border-brand/50 focus-visible:ring-2 focus-visible:ring-brand/40"
             />
           </div>
@@ -160,7 +175,7 @@ export function PipelineView({
                   : "border-transparent text-muted hover:text-foreground",
               )}
             >
-              {t} <span className="text-faint tabular-nums">{count}</span>
+              {TAB_LABELS[t]} <span className="text-faint tabular-nums">{count}</span>
             </button>
           );
         })}
@@ -168,14 +183,14 @@ export function PipelineView({
 
       {tab !== "INBOX" && minFilter != null && (
         <div className="mt-3 flex items-center gap-2">
-          <span className="text-xs text-faint">Filtered:</span>
+          <span className="text-xs text-faint">Filtro:</span>
           <button
             type="button"
             onClick={() => setParams({ min: null })}
             className="inline-flex items-center gap-1.5 rounded-full border border-brand/40 bg-brand-soft px-2.5 py-1 text-xs font-medium text-brand transition-colors hover:bg-brand/15"
-            title="Clear score filter"
+            title="Limpar filtro de nota"
           >
-            score ≥ {minFilter.toFixed(1)}
+            nota ≥ {minFilter.toFixed(1)}
             <X className="size-3" />
           </button>
         </div>
@@ -201,7 +216,7 @@ export function PipelineView({
                     onClick={() => setParams({ sort: k, dir: sort.key === k ? sort.dir * -1 : -1 })}
                   >
                     <span className="inline-flex items-center gap-1">
-                      {k}
+                      {SORT_LABELS[k]}
                       <ChevronsUpDown className="size-3" />
                     </span>
                   </th>
@@ -226,7 +241,7 @@ export function PipelineView({
                   <td className="px-4 py-3 text-muted">
                     <span className="inline-flex items-center gap-1.5">
                       <span className={cn("size-1.5 shrink-0 rounded-full", statusDot(r.status))} />
-                      {r.status}
+                      {statusLabel(r.status)}
                     </span>
                   </td>
                   <td className="px-4 py-3 text-faint tabular-nums">{r.date}</td>
@@ -237,8 +252,8 @@ export function PipelineView({
         </div>
       ) : (
         <div className="mt-4 rounded-2xl border border-dashed border-border bg-surface/30 px-6 py-12 text-center">
-          <p className="font-display text-lg">No matches</p>
-          <p className="mx-auto mt-1 max-w-sm text-sm text-muted">Try a different tab or clear the search.</p>
+          <p className="font-display text-lg">Nenhum resultado</p>
+          <p className="mx-auto mt-1 max-w-sm text-sm text-muted">Escolha outra aba ou limpe a busca.</p>
         </div>
       )}
     </div>
@@ -251,8 +266,8 @@ function InboxEmpty({ count, filtered }: { count: number; filtered: boolean }) {
   if (filtered) {
     return (
       <div className="mt-4 rounded-2xl border border-dashed border-border bg-surface/30 px-6 py-12 text-center">
-        <p className="font-display text-lg">No matches</p>
-        <p className="mx-auto mt-1 max-w-sm text-sm text-muted">Clear the search to see the full inbox.</p>
+        <p className="font-display text-lg">Nenhum resultado</p>
+        <p className="mx-auto mt-1 max-w-sm text-sm text-muted">Limpe a busca para ver toda a caixa de entrada.</p>
       </div>
     );
   }
@@ -262,25 +277,25 @@ function InboxEmpty({ count, filtered }: { count: number; filtered: boolean }) {
         <span className="size-2.5 rounded-full bg-foreground/15" aria-hidden="true" />
         <span className="size-2.5 rounded-full bg-foreground/15" aria-hidden="true" />
         <span className="size-2.5 rounded-full bg-foreground/15" aria-hidden="true" />
-        <span className="ml-3 font-mono text-xs tracking-wide text-muted">career-ops · inbox</span>
+        <span className="ml-3 font-mono text-xs tracking-wide text-muted">career-ops · caixa de entrada</span>
       </div>
       <div className="px-6 py-10 text-center">
         <p className="font-display text-lg">
-          Your <span className="text-brand">inbox</span> is empty.
+          Sua <span className="text-brand">caixa de entrada</span> está vazia.
         </p>
         {count > 0 ? (
-          <p className="mx-auto mt-2 max-w-sm text-sm text-muted">Nothing pending right now.</p>
+          <p className="mx-auto mt-2 max-w-sm text-sm text-muted">Nenhuma vaga pendente agora.</p>
         ) : (
           <>
-            <p className="mx-auto mt-2 max-w-sm text-sm text-muted">Find roles that match your CV — free, no tokens spent.</p>
+            <p className="mx-auto mt-2 max-w-sm text-sm text-muted">Encontre vagas compatíveis com seu currículo — gratuitamente e sem gastar tokens.</p>
             <Link
               href="/explore?run=1"
               className="mt-5 inline-flex items-center gap-2 rounded-full bg-brand px-5 py-2.5 text-sm font-medium text-brand-foreground shadow-sm transition-all duration-200 hover:bg-brand-200 hover:-translate-y-0.5 hover:shadow-md"
             >
-              <Compass className="size-4" /> Run your first free scan <ArrowRight className="size-4" />
+              <Compass className="size-4" /> Fazer minha primeira busca gratuita <ArrowRight className="size-4" />
             </Link>
             <p className="mx-auto mt-4 max-w-sm text-xs text-muted">
-              Prefer the terminal? Run <code className="rounded bg-surface-hover px-1 py-0.5 font-mono">career-ops scan</code>, or add job URLs to{" "}
+              Prefere o terminal? Execute <code className="rounded bg-surface-hover px-1 py-0.5 font-mono">career-ops scan</code> ou adicione URLs de vagas em{" "}
               <code className="rounded bg-surface-hover px-1 py-0.5 font-mono">data/pipeline.md</code>.
             </p>
           </>

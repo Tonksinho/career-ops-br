@@ -31,7 +31,7 @@ export function TodayDashboard({
   const [overdue, setOverdue] = useState(0);
   const [fresh, setFresh] = useState<DiscoveredOffer[]>([]);
   const router = useRouter();
-  const dateLabel = useMemo(() => new Date().toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric" }), []);
+  const dateLabel = useMemo(() => new Date().toLocaleDateString("pt-BR", { weekday: "long", day: "numeric", month: "short" }), []);
 
   const refetch = useCallback(() => {
     fetch("/api/followups")
@@ -78,36 +78,36 @@ export function TodayDashboard({
         <div aria-hidden className="pointer-events-none absolute inset-0 z-[1] bg-surface/55 backdrop-blur-[2px] dark:bg-background/45" />
         <div className="relative z-10">
           <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted">
-            <span className="text-faint">//</span> today · <span className="tabular-nums">{dateLabel}</span>
+            <span className="text-faint">//</span> hoje · <span className="tabular-nums">{dateLabel}</span>
           </p>
           <h1 className={`${instrumentSerif.className} mt-3 text-4xl leading-[1.05] text-landing md:text-5xl`}>
             {allClear ? (
-              <>You&apos;re all caught up.</>
+              <>Tudo em dia por aqui.</>
             ) : (
               <>
                 {newThisWeek > 0 && (
                   <>
-                    <span className="text-brand tabular-nums">{newThisWeek}</span> new match{newThisWeek === 1 ? "" : "es"} this week
+                    <span className="text-brand tabular-nums">{newThisWeek}</span> {newThisWeek === 1 ? "nova vaga compatível" : "novas vagas compatíveis"} nesta semana
                   </>
                 )}
                 {newThisWeek > 0 && overdue > 0 && <span className="text-faint"> · </span>}
                 {overdue > 0 && (
                   <>
-                    <span className="text-brand tabular-nums">{overdue}</span> follow-up{overdue === 1 ? "" : "s"} due
+                    <span className="text-brand tabular-nums">{overdue}</span> {overdue === 1 ? "acompanhamento pendente" : "acompanhamentos pendentes"}
                   </>
                 )}
               </>
             )}
           </h1>
           <p className="mt-4 max-w-xl text-sm text-muted">
-            {allClear ? "I'll keep scanning the market in the background and surface anything that fits." : "Your action queue for today — discovery and follow-ups, in one place."}
+            {allClear ? "Continuarei acompanhando o mercado e destacarei vagas compatíveis." : "Suas prioridades de hoje — novas vagas e acompanhamentos em um só lugar."}
           </p>
           <div className="mt-6 flex flex-wrap gap-2.5">
             <Link href="/explore" className="inline-flex items-center gap-2 rounded-full bg-brand px-5 py-2.5 text-sm font-medium text-brand-foreground transition hover:bg-brand-200 max-sm:min-h-[44px]">
-              Find new roles <ArrowRight className="size-4" />
+              Encontrar novas vagas <ArrowRight className="size-4" />
             </Link>
             <Link href="/pipeline" className="inline-flex items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-medium text-foreground transition hover:border-brand/40 hover:text-brand max-sm:min-h-[44px]">
-              Open pipeline
+              Abrir pipeline
             </Link>
           </div>
           {inBetween && <QuickEvaluate />}
@@ -116,7 +116,7 @@ export function TodayDashboard({
 
       {/* A. Follow-ups due (demand loop) */}
       {followups.length > 0 && (
-        <Section icon={Bell} title="Follow-ups due" hint="Keep your applications alive — a nudge beats silence">
+        <Section icon={Bell} title="Acompanhamentos pendentes" hint="Um contato no momento certo mantém a candidatura ativa">
           <div className="grid gap-2.5">
             {followups.map((f) => (
               <FollowUpCard key={`${f.num}-${f.company}`} followup={f} onLogged={() => setOverdue((n) => Math.max(0, n - 1))} />
@@ -127,7 +127,7 @@ export function TodayDashboard({
 
       {/* B. Awaiting your decision */}
       {awaiting.length > 0 && (
-        <Section icon={CircleHelp} title="Awaiting your decision" hint="Scored — apply or skip">
+        <Section icon={CircleHelp} title="Aguardando sua decisão" hint="Vagas avaliadas — candidatar ou descartar">
           <div className="grid gap-2.5 sm:grid-cols-2">
             {awaiting.map((a) => (
               <DecisionCard key={a.n} app={a} />
@@ -138,7 +138,7 @@ export function TodayDashboard({
 
       {/* C. Fresh matches this week (supply loop) */}
       {fresh.length > 0 && (
-        <Section icon={Sparkles} title="Fresh matches this week" hint="Found by your free scans · 0 tokens">
+        <Section icon={Sparkles} title="Novas vagas compatíveis nesta semana" hint="Encontradas pela busca gratuita · 0 tokens">
           <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
             {fresh.slice(0, 6).map((o) => (
               <DiscoveryCard key={o.url} offer={o} inPipeline={inboxUrls.has(o.url)} />
@@ -146,7 +146,7 @@ export function TodayDashboard({
           </div>
           {fresh.length > 6 && (
             <Link href="/explore" className="mt-3 inline-flex items-center text-sm text-muted transition hover:text-brand max-sm:min-h-[44px]">
-              See all {fresh.length} →
+              Ver todas as {fresh.length} vagas →
             </Link>
           )}
         </Section>
@@ -156,7 +156,7 @@ export function TodayDashboard({
         <div className="mt-8 rounded-2xl border border-border bg-surface/30 px-6 py-10 text-center">
           <Sparkles className="mx-auto size-6 text-brand" />
           <p className="mx-auto mt-3 max-w-md text-sm text-muted">
-            Nothing needs you right now. Run a <Link href="/explore" className="text-brand hover:underline">free scan</Link> to surface this week&apos;s roles, or check your <Link href="/pipeline" className="text-brand hover:underline">pipeline</Link>.
+            Nenhuma ação necessária agora. Execute uma <Link href="/explore" className="text-brand hover:underline">busca gratuita</Link> para encontrar vagas desta semana ou confira seu <Link href="/pipeline" className="text-brand hover:underline">pipeline</Link>.
           </p>
         </div>
       )}

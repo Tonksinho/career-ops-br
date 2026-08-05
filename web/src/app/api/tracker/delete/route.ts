@@ -28,17 +28,17 @@ export async function POST(req: Request) {
   try {
     body = await req.json();
   } catch {
-    return Response.json({ error: "bad json" }, { status: 400 });
+    return Response.json({ error: "JSON inválido" }, { status: 400 });
   }
   const num = String(body.n ?? "").trim();
   if (!/^\d+$/.test(num)) {
-    return Response.json({ error: "a numeric application number is required" }, { status: 400 });
+    return Response.json({ error: "É necessário informar um número de candidatura válido." }, { status: 400 });
   }
   const dryRun = !!body.dryRun;
 
   if (!trackerCanDelete()) {
     return Response.json(
-      { error: "Removing a tracker row needs a newer career-ops — update to delete rows from here." },
+      { error: "A remoção de uma linha do tracker precisa de uma versão mais recente do career-ops — atualize para excluir por aqui." },
       { status: 400 },
     );
   }
@@ -65,7 +65,7 @@ export async function POST(req: Request) {
       try {
         child = spawn(process.execPath, args, { cwd: careerOpsRoot(), env: process.env });
       } catch (e) {
-        resolve({ code: 1, err: e instanceof Error ? e.message : "failed to start tracker.mjs" });
+        resolve({ code: 1, err: e instanceof Error ? e.message : "Não foi possível iniciar tracker.mjs." });
         return;
       }
       child.stderr.on("data", (d: Buffer) => {
@@ -94,7 +94,7 @@ export async function POST(req: Request) {
     if (result.code !== 0) {
       const notFound = /No application numbered/i.test(result.err);
       return Response.json(
-        { error: result.err.trim().split("\n")[0] || "delete failed" },
+        { error: result.err.trim().split("\n")[0] || "Falha ao excluir." },
         { status: notFound ? 404 : 400 },
       );
     }

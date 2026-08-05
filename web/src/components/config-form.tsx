@@ -86,37 +86,37 @@ export function ConfigForm() {
 
   return (
     <div className="mx-auto max-w-2xl px-6 py-10">
-      <h1 className="font-display text-2xl tracking-tight text-landing">Config</h1>
+      <h1 className="font-display text-2xl tracking-tight text-landing">Configurações</h1>
       <p className="mt-1 text-sm text-muted">
-        Run career-ops on your own AI, right on your computer. Your CV and data never leave your machine.
+        Execute o career-ops com sua própria IA, diretamente no computador. Seu currículo e seus dados permanecem na sua máquina.
       </p>
 
       {/* Engine mode */}
       <label className="mt-8 mb-2 block text-xs font-semibold uppercase tracking-[0.18em] text-muted">
-        AI Engine
+        Mecanismo de IA
       </label>
       <div className="grid gap-2 sm:grid-cols-3">
         <ModeCard
           active={mode === "cli"}
           onClick={() => setMode("cli")}
           icon={Terminal}
-          title="Use an AI tool you have"
-          hint="Recommended"
+          title="Usar uma ferramenta de IA instalada"
+          hint="Recomendado"
         />
         <ModeCard
           active={mode === "key"}
           onClick={() => setMode("key")}
           icon={KeyRound}
-          title="Paste an AI key"
-          hint="Coming soon"
+          title="Informar uma chave de IA"
+          hint="Em breve"
           disabled
         />
         <ModeCard
           active={mode === "manual"}
           onClick={() => setMode("manual")}
           icon={TerminalSquare}
-          title="No setup needed"
-          hint="Coming soon"
+          title="Sem configuração"
+          hint="Em breve"
           disabled
         />
       </div>
@@ -125,18 +125,18 @@ export function ConfigForm() {
         {mode === "cli" && (
           <div>
             <p className="mb-1 text-sm text-muted">
-              career-ops uses an AI tool you already have — signed in, your own usage, nothing to paste.
+              O career-ops usa uma ferramenta de IA já instalada e autenticada, com sua própria conta.
             </p>
-            <p className="mb-3 text-xs text-faint">Works with Claude Code, Codex, OpenCode and more — free ones work great.</p>
+            <p className="mb-3 text-xs text-faint">Compatível com Claude Code, Codex, OpenCode e outras opções, inclusive gratuitas.</p>
             {clis === null ? (
               <div className="flex items-center gap-2 text-sm text-muted">
-                <Loader2 className="size-4 animate-spin" /> Checking what&apos;s on your computer…
+                <Loader2 className="size-4 animate-spin" /> Verificando as ferramentas instaladas…
               </div>
             ) : installed.length === 0 ? (
               <div className="rounded-xl border border-dashed border-border bg-surface/30 p-4 text-sm text-muted">
-                No AI tool yet? Free options like <span className="text-foreground">OpenCode</span> with Qwen or GLM work great.{" "}
+                Ainda não tem uma ferramenta de IA? Opções gratuitas como <span className="text-foreground">OpenCode</span> com Qwen ou GLM funcionam bem.{" "}
                 <a href="https://career-ops.org/docs/free-ai-engine" target="_blank" rel="noreferrer" className="inline-flex items-center gap-0.5 text-brand hover:underline">
-                  Get one free <ExternalLink className="size-3" />
+                  Instalar gratuitamente <ExternalLink className="size-3" />
                 </a>
               </div>
             ) : (
@@ -190,7 +190,7 @@ export function ConfigForm() {
                           rel="noreferrer"
                           className="inline-flex shrink-0 items-center justify-center gap-1 text-xs text-brand hover:underline max-sm:min-h-[44px]"
                         >
-                          Install <ExternalLink className="size-3" />
+                          Instalar <ExternalLink className="size-3" />
                         </a>
                       )}
                     </div>
@@ -198,12 +198,11 @@ export function ConfigForm() {
                 })}
                 {installed.length === 0 && (
                   <p className="rounded-xl border border-dashed border-border bg-surface/30 p-4 text-xs text-muted">
-                    No supported CLI found on your PATH. Install one (e.g. Claude Code, Gemini CLI, OpenCode) to get started.
+                    Nenhuma CLI compatível foi encontrada no PATH. Instale uma opção, como Claude Code, Gemini CLI ou OpenCode.
                   </p>
                 )}
                 <p className="mt-2 text-[11px] leading-relaxed text-faint">
-                  Best on <span className="text-muted">Claude Code</span> (live progress, the agentic apply + AI search,
-                  reliable evaluation persistence). Other CLIs work for the core flows with reduced features.
+                  Melhor experiência com <span className="text-muted">Claude Code</span> (progresso ao vivo, candidatura assistida e busca com IA). Outras CLIs funcionam nos fluxos principais com alguns recursos reduzidos.
                 </p>
               </div>
             )}
@@ -214,7 +213,7 @@ export function ConfigForm() {
           <div className="space-y-5">
             <div>
               <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.18em] text-muted">
-                Provider
+                Provedor
               </label>
               <div className="grid gap-2 sm:grid-cols-2">
                 {PROVIDERS.map((p) => (
@@ -236,9 +235,9 @@ export function ConfigForm() {
             </div>
             <div>
               <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.18em] text-muted">
-                Paste an AI key
+                Informar uma chave de IA
               </label>
-              <p className="mb-2 text-xs text-faint">Bring a key from OpenAI, Anthropic, and others.</p>
+              <p className="mb-2 text-xs text-faint">Use uma chave da OpenAI, Anthropic ou outro provedor.</p>
               <input
                 type="password"
                 value={apiKey}
@@ -248,7 +247,7 @@ export function ConfigForm() {
                 className="w-full rounded-xl border border-border bg-surface/60 px-4 py-2.5 font-mono text-sm outline-none transition-colors placeholder:text-faint focus:border-brand/50"
               />
               <p className="mt-2 text-xs text-faint">
-                Stored only in this browser — never sent anywhere but your chosen provider.
+                Armazenada somente neste navegador e enviada apenas ao provedor escolhido.
               </p>
             </div>
           </div>
@@ -256,14 +255,14 @@ export function ConfigForm() {
 
         {mode === "manual" && (
           <div className="rounded-xl border border-dashed border-border bg-surface/30 p-4 text-sm text-muted">
-            The easiest way in — no keys, nothing to set up. On the roadmap.
+            A forma mais simples: sem chaves nem configuração. Recurso planejado.
           </div>
         )}
       </div>
 
       {/* Appearance / privacy */}
       <label className="mt-8 mb-2 block text-xs font-semibold uppercase tracking-[0.18em] text-muted">
-        Appearance
+        Aparência
       </label>
       <button
         type="button"
@@ -271,10 +270,9 @@ export function ConfigForm() {
         className="flex w-full items-center justify-between gap-4 rounded-xl border border-border bg-surface/50 px-4 py-3 text-left transition-colors hover:bg-surface-hover"
       >
         <span className="min-w-0">
-          <span className="block text-sm font-medium text-foreground">Company logos</span>
+          <span className="block text-sm font-medium text-foreground">Logos das empresas</span>
           <span className="mt-0.5 block text-xs text-faint">
-            Show each company&apos;s real logo. Fetched once through your local server and cached on
-            disk — only the employer domain is sent to a third party. Off = colored monograms only.
+            Exibe o logo real de cada empresa. Ele é obtido uma vez pelo servidor local e guardado em cache; somente o domínio da empresa é enviado a terceiros. Desativado = apenas monogramas coloridos.
           </span>
         </span>
         <span
@@ -301,9 +299,9 @@ export function ConfigForm() {
           className="inline-flex items-center justify-center gap-2 rounded-full bg-brand px-5 py-2 text-sm font-medium text-brand-foreground transition-colors hover:bg-brand-200 max-sm:min-h-[44px]"
         >
           {saved ? <Check className="size-4" /> : null}
-          {saved ? "Saved" : "Save config"}
+          {saved ? "Salvo" : "Salvar configurações"}
         </button>
-        <span className="text-xs text-faint">Local-first · on our roadmap</span>
+        <span className="text-xs text-faint">Prioridade local · em evolução</span>
       </div>
     </div>
   );

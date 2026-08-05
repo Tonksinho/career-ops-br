@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Check } from "lucide-react";
-import { CANONICAL_STATES } from "@/lib/format";
+import { CANONICAL_STATES, statusLabel } from "@/lib/format";
 
 // Status writeback control. Updates the existing tracker row (status cell) via
 // /api/status — never adds rows. Reverts on failure; confirms with the
@@ -49,13 +49,13 @@ export function StatusSelect({ n, current }: { n: string; current: string }) {
         {!known && <option value={status}>{status}</option>}
         {CANONICAL_STATES.map((s) => (
           <option key={s} value={s}>
-            {s}
+            {statusLabel(s)}
           </option>
         ))}
       </select>
       {saved && (
         <span className="animate-terminal-popup inline-flex items-center gap-1 text-xs font-medium text-brand">
-          <Check className="size-3" /> saved
+          <Check className="size-3" /> salvo
         </span>
       )}
     </span>
