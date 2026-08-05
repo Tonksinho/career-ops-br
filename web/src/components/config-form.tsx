@@ -32,6 +32,7 @@ const PROVIDERS = [
 ] as const;
 
 const STORAGE_KEY = "career-ops:config";
+const CLI_DEFAULT_VERSION = 1;
 
 export function ConfigForm() {
   const [mode, setMode] = useState<Mode>("cli");
@@ -67,8 +68,15 @@ export function ConfigForm() {
       .then((d) => {
         const list: Cli[] = d.clis ?? [];
         setClis(list);
-        // auto-select first installed if nothing chosen yet
-        setCliId((prev) => prev || list.find((c) => c.installed)?.id || "");
+        // Codex is the preferred default. Keep a valid manual selection and
+        // fall back gracefully when Codex is not installed.
+        setCliId((prev) =>
+          list.some((c) => c.id === prev && c.installed)
+            ? prev
+            : list.find((c) => c.id === "codex" && c.installed)?.id ||
+              list.find((c) => c.installed)?.id ||
+              "",
+        );
       })
       .catch(() => setClis([]));
   }, []);
@@ -77,7 +85,10 @@ export function ConfigForm() {
     // The API key is deliberately NOT persisted: nothing reads it yet (the
     // key/manual panel is unwired) and a secret must never sit in clear-text
     // localStorage. Keys belong in the user's own CLI/provider config.
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ mode, cliId, provider, logos }));
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({ mode, cliId, provider, logos, cliDefaultVersion: CLI_DEFAULT_VERSION }),
+    );
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   }

@@ -25,6 +25,11 @@ export const viewport: Viewport = {
 // jarring light seam. Matches --bg (light #f7f6f3 / dark #0a0a0a).
 const THEME_SCRIPT = `(function(){try{var t=localStorage.getItem('career-ops:theme');var d=t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches);if(d)document.documentElement.classList.add('dark');var m=document.querySelector('meta[name="theme-color"]');if(!m){m=document.createElement('meta');m.setAttribute('name','theme-color');document.head.appendChild(m);}m.setAttribute('content',d?'#0a0a0a':'#f7f6f3');}catch(e){document.documentElement.classList.add('dark');}})();`;
 
+// One-time migration from the upstream first-installed default (usually
+// Claude) to Codex. Future choices saved in Configurações keep version 1 and
+// are therefore preserved.
+const CLI_DEFAULT_SCRIPT = `(function(){try{var k='career-ops:config';var r=localStorage.getItem(k);var c=r?JSON.parse(r):{};if(c.cliDefaultVersion!==1){c.cliId='codex';c.cliDefaultVersion=1;localStorage.setItem(k,JSON.stringify(c));}}catch(e){}})();`;
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
@@ -34,6 +39,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <body className="font-sans antialiased">
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+        <script dangerouslySetInnerHTML={{ __html: CLI_DEFAULT_SCRIPT }} />
         <AppShell>{children}</AppShell>
       </body>
     </html>
